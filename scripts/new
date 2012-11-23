@@ -21,7 +21,7 @@ on_fail () {
 
 gen_cache () {
   rm -rf "${cache}" 2> /dev/null
-  git clone git://github.com/Skookum/base12.git --depth 1 "${cache}"
+  git clone git://github.com/autoric/structure-template.git --depth 1 "${cache}"
   on_fail 'Clone of base12 failed!'
 
   cd "${cache}"
@@ -39,7 +39,7 @@ generate () {
   if [ -d "${cache}" ] ; then
     cp -R "${cache}" "${dest}"
   else
-    git clone git://github.com/Skookum/base12.git --depth 1 "${dest}"
+    git clone git://github.com/autoric/structure-template.git --depth 1 "${dest}"
   fi
   on_fail 'Clone of base12 failed!'
 

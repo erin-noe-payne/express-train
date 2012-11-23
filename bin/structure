@@ -1,6 +1,6 @@
 #!/bin/bash
 
-dirname="`npm root -g`/base12/scripts"
+dirname="`npm root -g`/structure/scripts"
 scriptname=$1
 
 shift

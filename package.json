@@ -1,5 +1,5 @@
 {
-  "name": "base12",
+  "name": "structure",
   "description": "12factor.net app platform for node.js, built on express 3",
   "version": "0.3.1",
   "author": {
@@ -30,7 +30,7 @@
   ],
   "dependencies": {
     "connect": "2.0.3",
-    "express": "git://github.com/Skookum/express.git",
+    "express": "latest",
     "async": "latest",
     "underscore": "latest",
     "jade": "latest",
@@ -38,7 +38,7 @@
   },
   "devDependencies": {},
   "keywords": [
-    "base12",
+    "structure",
     "framework",
     "web",
     "rest",
@@ -50,11 +50,11 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/Skookum/base12"
+    "url": "https://github.com/autoric/structure"
   },
   "main": "index",
   "bin": {
-    "base12": "./bin/base12"
+    "structure": "./bin/structure"
   },
   "scripts": {
     "prepublish": "npm prune"
@@ -62,6 +62,6 @@
   "engines": {
     "node": ">= 0.6.0"
   },
-  "_id": "base12@0.3.1",
-  "_from": "base12@0.3.1"
+  "_id": "structure@0.3.1",
+  "_from": "structure@0.3.1"
 }
