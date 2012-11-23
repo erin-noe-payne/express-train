@@ -1,0 +1,67 @@
+{
+  "name": "base12",
+  "description": "12factor.net app platform for node.js, built on express 3",
+  "version": "0.3.1",
+  "author": {
+    "name": "Hunter Loftis",
+    "email": "hunter@hunterloftis.com"
+  },
+  "contributors": [
+    {
+      "name": "Hunter Loftis",
+      "email": "hunter@hunterloftis.com"
+    },
+    {
+      "name": "Jim Snodgrass",
+      "email": "jim@skookum.com"
+    },
+    {
+      "name": "David Becher",
+      "email": "david@skookum.com"
+    },
+    {
+      "name": "Chris Gomez",
+      "email": "akagomez@gmail.com"
+    },
+    {
+      "name": "Kenny Parnell",
+      "email": "kenny@skoomum.com"
+    }
+  ],
+  "dependencies": {
+    "connect": "2.0.3",
+    "express": "git://github.com/Skookum/express.git",
+    "async": "latest",
+    "underscore": "latest",
+    "jade": "latest",
+    "commander": "latest"
+  },
+  "devDependencies": {},
+  "keywords": [
+    "base12",
+    "framework",
+    "web",
+    "rest",
+    "restful",
+    "deploy",
+    "deployment",
+    "12factor",
+    "cloud"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Skookum/base12"
+  },
+  "main": "index",
+  "bin": {
+    "base12": "./bin/base12"
+  },
+  "scripts": {
+    "prepublish": "npm prune"
+  },
+  "engines": {
+    "node": ">= 0.6.0"
+  },
+  "_id": "base12@0.3.1",
+  "_from": "base12@0.3.1"
+}

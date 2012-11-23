@@ -1,0 +1,10 @@
+#!/bin/bash
+
+dirname="`npm root -g`/base12/scripts"
+scriptname=$1
+
+shift
+
+"$dirname/$scriptname" "$@"
+
+exit 0

@@ -1,0 +1,38 @@
+{
+    "name": "base12project",
+    "version": "0.0.1",
+    "directories": {},
+    "engines": {
+        "node": ">=0.6.6",
+        "npm": ">=1.1"
+    },
+    "dependencies": {
+        "base12": "latest",
+        "jade": "latest",
+        "express": "git://github.com/visionmedia/express.git",
+        "connect": "git://github.com/hunterloftis/connect.git",
+        "stylus": "latest",
+        "connect-redis": "latest",
+        "express-resource": "latest",
+        "express-messages": "git://github.com/hunterloftis/express-messages.git",
+        "redis": "latest"
+    },
+    "devDependencies": {
+        "vows": "latest"
+    },
+    "scripts": {
+        "lock": "scripts/module_lock.js",
+        "postinstall": "scripts/postinstall.js",
+        "test": "vows test/*.vows.js"
+    },
+    "constants": {
+        "title": "base12 app",
+        "session_length": 1209600000,
+        "request_timeout": 10000
+    },
+    "provision": {
+        "node": "0.6.12",
+        "mongodb": "2.0.3",
+        "redis": "2.4.8"
+    }
+}

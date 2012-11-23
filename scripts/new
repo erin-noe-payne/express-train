@@ -1,0 +1,78 @@
+#!/bin/bash
+# vim: set ts=2 sw=2 et:
+
+prog=$0
+dest=$1
+cache="$HOME/.base12/cached"
+
+show_help () {
+  echo -e "Usage: ${prog} option|dest\n" 1>&2
+  echo "    -h|--help     Show this" 1>&2
+  echo -e "    -c|--cache    Cache base12 locally\n" 1>&2
+}
+
+on_fail () {
+  ret=$?
+  if [ $ret -ne 0 ] ; then
+    echo $1 1>&2
+    exit $ret
+  fi
+}
+
+gen_cache () {
+  rm -rf "${cache}" 2> /dev/null
+  git clone git://github.com/Skookum/base12.git --depth 1 "${cache}"
+  on_fail 'Clone of base12 failed!'
+
+  cd "${cache}"
+  npm install
+  on_fail 'npm failed to install required dependencies'
+}
+
+generate () {
+  if [ -e "${dest}" ] ; then
+    echo "${dest} already exists!" 1>&2
+    exit 1
+  fi 
+
+  # Attempt to clone base12
+  if [ -d "${cache}" ] ; then
+    cp -R "${cache}" "${dest}"
+  else
+    git clone git://github.com/Skookum/base12.git --depth 1 "${dest}"
+  fi
+  on_fail 'Clone of base12 failed!'
+
+  # Remove upstream git
+  cd "${dest}"
+  rm -rf .git
+  on_fail 'Removal of git origin failed!'
+
+  # Install packages
+  npm install
+  on_fail 'npm failed to install required dependencies'
+
+  # Show getting started text
+  echo ''
+  echo "Next: try your new base12 project!"
+  echo "'cd ${dest}'"
+  echo "'node run'"
+  echo ''
+}
+
+if [ -z "${dest}" ] ; then
+  show_help
+  exit 1
+fi
+
+case "${dest}" in
+  "-h"|"--help")
+    show_help
+    ;;
+  "-c"|"--cache")
+    gen_cache
+    ;;
+  *)
+    generate
+    ;;
+esac
