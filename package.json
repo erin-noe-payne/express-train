@@ -1,6 +1,6 @@
 {
-    "name":"structure",
-    "description":"12factor.net app platform for node.js, built on express 3",
+    "name":"express-train",
+    "description":"express 3 framework",
     "version":"0.0.1",
     "author":{
         "name":"Erin Noe-Payne",
@@ -8,30 +8,16 @@
     },
     "contributors":[
         {
-            "name":"Paul Vencil"
+            "name":"Erin Noe-Payne",
+            "email":"saizul@gmail.com"
         },
         {
-            "name":"Hunter Loftis",
-            "email":"hunter@hunterloftis.com"
-        },
-        {
-            "name":"Jim Snodgrass",
-            "email":"jim@skookum.com"
-        },
-        {
-            "name":"David Becher",
-            "email":"david@skookum.com"
-        },
-        {
-            "name":"Chris Gomez",
-            "email":"akagomez@gmail.com"
-        },
-        {
-            "name":"Kenny Parnell",
-            "email":"kenny@skoomum.com"
+            "name":"Paul Vencil",
+            "email":""
         }
     ],
     "dependencies":{
+        "boilerplate":"git://github.com/pvencill/boilerplate.git",
         "connect":"2.0.3",
         "express":"latest",
         "async":"latest",
@@ -41,7 +27,7 @@
     },
     "devDependencies":{},
     "keywords":[
-        "structure",
+        "train",
         "framework",
         "web",
         "rest",
@@ -53,18 +39,19 @@
     ],
     "repository":{
         "type":"git",
-        "url":"https://github.com/autoric/structure"
+        "url":"https://github.com/autoric/express-train"
     },
     "main":"index",
     "bin":{
-        "structure":"./bin/structure"
+        "train":"./bin/train"
     },
     "scripts":{
+        "postinstall":"./bin/train boilerplate register default git://github.com/autoric/express-train-template.git",
         "prepublish":"npm prune"
     },
     "engines":{
         "node":">= 0.6.0"
     },
-    "_id":"structure@0.0.1",
-    "_from":"structure@0.0.1"
+    "_id":"express-train@0.0.1",
+    "_from":"express-train@0.0.1"
 }

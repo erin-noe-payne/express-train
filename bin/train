@@ -1,0 +1,34 @@
+#!/usr/local/bin/node
+
+var program = require('commander'),
+    pkg = require('../package.json'),
+    path = require('path'),
+    fs = require('fs')
+    _ = require('underscore');
+
+program.version(pkg.version)
+.usage('[command] <options>');
+
+var commands = load(path.join(__dirname, 'commands'));
+
+_.each(commands, function(addCommand) {
+    addCommand(program);
+});
+
+program.parse(process.argv);
+
+function load(dir) {
+    var loaded = {};
+
+    var files = fs.readdirSync(dir);
+
+    files.forEach(function(file){
+        var filePath = path.join(dir,file);
+        var fileName = path.basename(filePath, path.extname(filePath));
+        if(fs.existsSync(filePath)){
+            loaded[fileName] = require(filePath);
+        }
+    });
+
+    return loaded;
+}

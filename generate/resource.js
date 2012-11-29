@@ -1,6 +1,6 @@
 
 var fs = require('fs'),
-    lib = require('./lib'),
+    lib = require('../lib'),
     template_dir = __dirname+'/templates/',
     resource_name = process.argv[4],
     app_root = process.env.PWD,
