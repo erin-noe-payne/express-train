@@ -13,20 +13,17 @@ module.exports = function (program) {
         var destination = path.resolve(process.cwd(), destination);
 
         boilerplate.generate(source, destination, function (err, stdout) {
+            console.log(stdout);
             var install = ps.spawn('npm',['install'], {
                 cwd: destination
             });
 
             install.stdout.pipe(process.stdout);
             install.stderr.pipe(process.stderr);
+            install.on('exit', function(){
+                console.log('express train app is ready!');
+                console.log('go to %s to get started', destination);
+            })
         });
     });
-
-    /*var source = program.boilerplate || 'default';
-     var destination = path.resolve(program.dir, program.args[1]);
-
-     boilerplate.generate(source, destination, function(err) {
-     if(err) return console.error(err);
-
-     });*/
 }

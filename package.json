@@ -23,7 +23,8 @@
         "async":"latest",
         "underscore":"latest",
         "jade":"latest",
-        "commander":"latest"
+        "commander":"latest",
+        "up": "latest"
     },
     "devDependencies":{},
     "keywords":[
