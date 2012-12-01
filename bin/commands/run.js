@@ -1,38 +1,32 @@
 var //spawn = require('child_process').spawn,
     up = require('up'),
     path = require('path'),
-    train = require('express-train'),
+    train = require('../../lib/app'),
     _ = require('underscore');
 
-module.exports = function(program) {
-    /*var cmd = program.command('run');
+module.exports = function (program) {
+    var cmd = program.command('run [workers]')
+    //.option('-w, --workers', 'Number of worker processes to run, defaulting to number of cpus');
 
-    cmd.action(function(){
+    var opts = {
+        numWorkers:undefined,
+        workerTimeout:undefined,
+        title:undefined
+
+    }
+
+    cmd.action(function () {
         var args = _.toArray(arguments);
-        var up = spawn(up, arguments, {})
+        var appPath = path.join(process.cwd(), '/app');
 
-    })
-
-    var up = path.resolve(__dirname, '../../node_modules/up/bin/up');
-    var app = train.app(path.join(process.cwd(), '/app'));
-
-
-    spawn('up', )*/
-
-    var cmd = program.command('run [workers]');
-
-    cmd.action(function(){
-        var args = _.toArray(arguments);
-        var appPath = path.join(process.cwd(), '/app')
-
-        var app = train.app(appPath);
-        var srv = up(app.start(), appPath);
+        var app = train(appPath);
+        /*var srv = up(app.start(), appPath, {
+            numWorkers:1
+        });
 
         process.on('SIGUSR2', function () {
             srv.reload();
-        });
+        });*/
+        app.start();
     });
-
-
-
 }

@@ -6,7 +6,8 @@ var boilerplate = require('boilerplate'),
 
 module.exports = function (program) {
     var cmd = program.command('new <destination>')
-        .option('-b, --boilerplate', 'A valid boilerplate to use for the new project');
+        .option('-b, --boilerplate', 'A valid boilerplate to use for the new project')
+        .option('-v, --verbose', 'Verbose output');
 
     cmd.action(function (destination) {
         var source = cmd.boilerplate || 'default';
@@ -14,7 +15,7 @@ module.exports = function (program) {
 
         boilerplate.generate(source, destination, function (err, stdout) {
             console.log(stdout);
-            var install = ps.spawn('npm',['install'], {
+            var install = ps.spawn('npm',['install', (cmd.verbose?'--verbose':'')], {
                 cwd: destination
             });
 
