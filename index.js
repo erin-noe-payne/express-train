@@ -1,10 +1,6 @@
 /*
- * base12
+ * express-train
  * MIT Licensed
- */
-
-/*
- * expose public
  */
 
 module.exports = {
