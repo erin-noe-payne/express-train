@@ -5,8 +5,9 @@ var //spawn = require('child_process').spawn,
     _ = require('underscore');
 
 module.exports = function (program) {
-    var cmd = program.command('run [workers]')
-    //.option('-w, --workers', 'Number of worker processes to run, defaulting to number of cpus');
+    var cmd = program.command('run [workers]');
+        //.option('--debug', 'debug the process');
+        //.option('-w, --workers', 'Number of worker processes to run, defaulting to number of cpus');
 
     var opts = {
         numWorkers:undefined,
