@@ -17,7 +17,7 @@
         }
     ],
     "dependencies":{
-        "boilerplate":"git://github.com/pvencill/boilerplate.git",
+        
         "connect":"latest",
         "express":"latest",
         "underscore":"latest",
