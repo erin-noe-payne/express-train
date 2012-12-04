@@ -45,7 +45,6 @@
         "train":"./bin/train"
     },
     "scripts":{
-        "postinstall":"./.bin/train boilerplate register default git://github.com/autoric/express-train-template.git",
         "prepublish":"npm prune"
     },
     "engines":{
