@@ -40,7 +40,7 @@
         "type":"git",
         "url":"https://github.com/autoric/express-train"
     },
-    "main":"index",
+    "main":"./lib/app.js",
     "bin":{
         "train":"./bin/train"
     },
