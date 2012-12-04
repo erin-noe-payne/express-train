@@ -3,8 +3,9 @@ var repl = require('repl'),
     train = require('../../lib/app');
 
 module.exports = function(program) {
-    var cmd = program.command('repl');
+    var cmd = program.command('console');
 
+    //TODO: implement sandbox?
     cmd.action(function(){
         var appPath = path.join(process.cwd(), '/app');
         var app = train(appPath);

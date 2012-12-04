@@ -1,33 +1,19 @@
-var //spawn = require('child_process').spawn,
-    up = require('up'),
-    path = require('path'),
-    train = require('../../lib/app'),
-    _ = require('underscore');
+var path = require('path');
 
 module.exports = function (program) {
     var cmd = program.command('run [workers]');
-        //.option('--debug', 'debug the process');
-        //.option('-w, --workers', 'Number of worker processes to run, defaulting to number of cpus');
-
-    var opts = {
-        numWorkers:undefined,
-        workerTimeout:undefined,
-        title:undefined
-
-    }
 
     cmd.action(function () {
-        var args = _.toArray(arguments);
-        var appPath = path.join(process.cwd(), '/app');
+        var appPath = path.join(process.cwd(), '/app/index.js');
 
-        var app = train(appPath);
-        /*var srv = up(app.start(), appPath, {
-            numWorkers:1
-        });
-
-        process.on('SIGUSR2', function () {
-            srv.reload();
-        });*/
-        app.start();
+        require(appPath);
     });
+
+
+    /*
+     in both cases I want to pass on arbitrary command line options!
+     train run: runs the application
+     train cycle: uses nodemon to cycle the application
+     allow index.js to give users ability to do whatever they want
+     */
 }

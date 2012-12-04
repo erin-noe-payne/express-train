@@ -20,11 +20,9 @@
         "boilerplate":"git://github.com/pvencill/boilerplate.git",
         "connect":"latest",
         "express":"latest",
-        "async":"latest",
         "underscore":"latest",
-        "jade":"latest",
         "commander":"latest",
-        "up": "latest"
+        "nodemon": "latest"
     },
     "devDependencies":{},
     "keywords":[
