@@ -22,19 +22,15 @@
         "express":"latest",
         "underscore":"latest",
         "commander":"latest",
-        "nodemon": "latest"
+        "nodemon":"latest"
     },
     "devDependencies":{},
     "keywords":[
+        "express",
         "train",
         "framework",
         "web",
-        "rest",
-        "restful",
-        "deploy",
-        "deployment",
-        "12factor",
-        "cloud"
+        "webapp"
     ],
     "repository":{
         "type":"git",
