@@ -148,6 +148,7 @@ module.exports = function(app) {
  - List.  This is a useful shorthand syntax in case you want to control the order in which files are loaded. Modules
 will be loaded in the order declared in the list. This will mostly be used for the lib autoloader,
 but may be important if there are interdependencies between models.
+
 ```javascript
 // models/index.js
 
