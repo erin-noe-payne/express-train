@@ -1,7 +1,6 @@
-# All board!
+# All Aboard!
 
-Welcome to Express Train. Express Train is a framework for building [12 factor](http://www.12factor
-.net/) web applications in nodejs, based on [express 3](http://expressjs.com/).
+Welcome to Express Train! Express Train is a framework for building [12 factor](http://www.12factor.net/) web applications in nodejs, based on [express 3](http://expressjs.com/).
 
 To get started:
 ```
@@ -18,7 +17,7 @@ struggle to define a repeatable process or consistent structure for their projec
 
 Our goal is to provide a framework that will make some reasonable decisions to get a new project up and running
 quickly and give a consistent structure for your web applications, without asking you to sacrifice any of the
-flexibility you are used to from express.  We also aim to provide a powerful and fully featured set of cli tools to
+flexibility you are used to from express.  We also aim to provide a powerful and fully featured set of CLI tools to
 set up project scaffolding, explore your application, and define custom boilerplates for any situation.
 
 # How it works
@@ -124,7 +123,7 @@ object in this order:
 
 Environmental configuration is stored in .env.json. These should be values specific to an environment,
 such as database connection strings, http / https settings, port number, etc. Sample configuration files are kept in
-the config directory.  The json object is loaded directly on to app.config.
+the config directory.  By default, .env.json is in .gitignore and will be generated in the environment based on the NODE_ENV variable set in that environment the first time the application starts.  The json object is loaded directly on to app.config.
 
 ### Models, middleware, controllers
 
@@ -134,7 +133,9 @@ you can add an index.js file. Index.js may conform to one of two signatures:
 
  - Express train module. This gives you the most control - and the resulting hash on app.models / middleware /
 controllers will match the return value of the function.
+
 ```javascript
+
 // models/index.js
 
 module.exports = function(app) {
@@ -163,7 +164,7 @@ application. You can organize the files any way you want, but you will need an i
 
 # API
 
-Express train is meant to be installed and used globally. It provides a rich cli for creating boilerplates,
+Express Train is meant to be installed and used globally. It provides a rich cli for creating boilerplates,
 building scaffolding for new projects, and running and development.
 
 ## CLI
