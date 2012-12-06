@@ -1,4 +1,4 @@
-# All board!
+# All aboard!
 
 Welcome to Express Train. Express Train is a framework for building [12 factor](http://www.12factor
 .net/) web applications in nodejs, based on [express 3](http://expressjs.com/).
@@ -47,8 +47,7 @@ package.json        -- npm package.json (needs to have express-train as a depend
 .env.js             -- environment-specific configuration file
 ```
 
-For a fully functioning example, you can view [express-train-template](https://github
-.com/autoric/express-train-template). This is the default project scaffolding
+For a fully functioning example, you can view [express-train-template](https://github.com/autoric/express-train-template). This is the default project scaffolding
 that ships with Express Train.
 
 ## Modules (controllers, models, middleware and libs)
@@ -158,7 +157,7 @@ module.exports = ['Users', 'Blogs', 'Orders'];
 The app/lib directory should contain your application libs.  These modules will set up your view engine,
 define your routes, authentication, set up your middleware stack, or anything else you want to do with your
 application. You can organize the files any way you want, but you will need an index.js file to define the order that
- the lib modules are invoked when they are autoloaded at run time.  For a working example you can view the
+ the lib modules are invoked when they are autoloaded at run time.  Again, for a working example check the
  [express-train-template](https://github.com/autoric/express-train-template).
 
 # API
@@ -178,6 +177,14 @@ The cli is now available via
 $ train
 ```
 
+### train boilerplate
+
+- register <alias> <source>
+- unregister <alias>
+
+### train new <destination>
+
+Creates a new Express Train application 
 
 
 ## Programmatic API
