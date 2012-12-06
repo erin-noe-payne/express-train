@@ -1,51 +1,51 @@
 {
-    "name":"express-train",
-    "description":"express 3 framework",
-    "version":"0.0.1",
-    "author":{
-        "name":"Erin Noe-Payne",
-        "email":"saizul@gmail.com"
+  "name": "express-train",
+  "description": "express 3 framework",
+  "version": "0.0.2",
+  "author": {
+    "name": "Erin Noe-Payne",
+    "email": "saizul@gmail.com"
+  },
+  "contributors": [
+    {
+      "name": "Erin Noe-Payne",
+      "email": "saizul@gmail.com"
     },
-    "contributors":[
-        {
-            "name":"Erin Noe-Payne",
-            "email":"saizul@gmail.com"
-        },
-        {
-            "name":"Paul Vencil",
-            "email":""
-        }
-    ],
-    "dependencies":{
-        "boilerplate":"git://github.com/pvencill/boilerplate.git",
-        "connect":"latest",
-        "express":"latest",
-        "underscore":"latest",
-        "commander":"latest",
-        "nodemon":"latest"
-    },
-    "devDependencies":{},
-    "keywords":[
-        "express",
-        "train",
-        "framework",
-        "web",
-        "webapp"
-    ],
-    "repository":{
-        "type":"git",
-        "url":"https://github.com/autoric/express-train"
-    },
-    "main":"./lib/app.js",
-    "bin":{
-        "train":"./bin/train"
-    },
-    "scripts":{
-        "prepublish":"npm prune"
-    },
-    "engines":{
-        "node":">= 0.6.0"
-    },
-    "_id":"express-train@0.0.1",
-    "_from":"express-train@0.0.1"
+    {
+      "name": "Paul Vencil",
+      "email": ""
+    }
+  ],
+  "dependencies": {
+    "boilerplate": "git://github.com/pvencill/boilerplate.git",
+    "connect": "latest",
+    "express": "latest",
+    "underscore": "latest",
+    "commander": "latest",
+    "nodemon": "latest"
+  },
+  "devDependencies": {},
+  "keywords": [
+    "express",
+    "train",
+    "framework",
+    "web",
+    "webapp"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/autoric/express-train"
+  },
+  "main": "./lib/app.js",
+  "bin": {
+    "train": "./bin/train"
+  },
+  "scripts": {
+    "prepublish": "npm prune"
+  },
+  "engines": {
+    "node": ">= 0.6.0"
+  },
+  "_id": "express-train@0.0.1",
+  "_from": "express-train@0.0.1"
 }
