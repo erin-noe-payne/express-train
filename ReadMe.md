@@ -43,6 +43,7 @@ config              -- sample configuration files
 test                -- tests
 
 package.json        -- npm package.json (needs to have express-train as a dependency)
+constants.json      -- universal application configuration file
 .env.js             -- environment-specific configuration file
 ```
 
@@ -118,7 +119,10 @@ object in this order:
     - app/controllers -> app.controllers
     - app/lib (lib files are not loaded onto an object, but are invoked before app start)
 
-### Configuration
+### Constants and Configuration
+
+Application constants - configuration values that will not change from one environment / deployment to the next -
+are written to constants.json.
 
 Environmental configuration is stored in .env.json. These should be values specific to an environment,
 such as database connection strings, http / https settings, port number, etc. Sample configuration files are kept in

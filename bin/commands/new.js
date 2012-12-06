@@ -1,7 +1,14 @@
 var boilerplate = require('boilerplate'),
     path = require('path'),
     fs = require('fs'),
-    ps = require('child_process');
+    ps = require('child_process'),
+    _ = require('underscore');
+
+var templates = {
+    'basic': '',
+    'train': 'https://github.com/autoric/express-train-template',
+    'default': 'train'
+}
 
 
 module.exports = function (program) {
@@ -10,6 +17,8 @@ module.exports = function (program) {
         .option('-v, --verbose', 'Verbose output');
 
     cmd.action(function (destination) {
+        registerTemplates();
+
         var source = cmd.boilerplate || 'default';
         var destination = path.resolve(process.cwd(), destination);
 
@@ -26,5 +35,14 @@ module.exports = function (program) {
                 console.log('go to %s to get started', destination);
             })
         });
+    });
+}
+
+function registerTemplates(){
+    _.each(templates, function(source, alias){
+        console.log(alias, boilerplate.view(alias));
+        if(!boilerplate.view(alias)){
+            boilerplate.register(alias, source);
+        }
     });
 }

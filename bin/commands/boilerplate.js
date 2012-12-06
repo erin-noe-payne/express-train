@@ -15,6 +15,10 @@ module.exports = function(program){
         .usage('unregister a boilerplate alias')
         .action(boilerplate.unregister);
 
+    cmd.command('view <alias>')
+        .usage('show the source for a boilerplate alias')
+        .action(boilerplate.view);
+
     cmd.action(function(){
         var args = process.argv.slice(1);
         //console.log();
