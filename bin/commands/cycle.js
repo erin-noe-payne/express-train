@@ -9,6 +9,7 @@ module.exports = function(program) {
     cmd.action(function(){
         var appPath = path.join('./app');
 
+        //todo excvp() error?
         var nodemon = spawn('node_modules/.bin/nodemon', [cmd.debug?'--debug':'', appPath],{
             cwd: process.cwd()
         });
