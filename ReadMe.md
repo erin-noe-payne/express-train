@@ -114,8 +114,7 @@ modules is an express 3 application and conforms entirely to the [express api](h
 
 Module loading is designed to be fairly flexible.  If you do not define an index.js, the loader will just call require() on each file in the directory and if that module returns a function as described above it will call that function and pass it the app instance.  If you want to take more control of which files are loaded or in what order they are loaded, you can add an index.js file. Index.js may conform to one of two signatures:
 
- - Express train module. This gives you the most control - and the resulting hash on app.models / middleware /
-controllers will match the return value of the function.
+ - Express train module. This gives you the most control 
 
 ```javascript
 
@@ -172,7 +171,7 @@ Initialization logic for the application which needs to happen after configs hav
 
 By default, modules are loaded to these hashes based on their file name (models/Users.js is loaded on to app.models
 .Users;  controllers/home.js to app.controllers.home and so on). However, as mentioned in Autoloading, if you want to take more control
-you can add an index.js file. 
+you can add an index.js file.
 
 ### Lib
 
