@@ -15,7 +15,7 @@ describe('train app', function(){
       it('should have the development-secret key', function(){
         app.config.cookie_secret.should.equal(devJson.cookie_secret);
       })
-    })
+    });
 
     describe('when env does not match a file', function(){
       process.env.NODE_ENV = 'ferret';
@@ -24,7 +24,16 @@ describe('train app', function(){
       it('should have the default secret key', function(){
         app.config.cookie_secret.should.equal(defaultCfg.cookie_secret);
       })
-    })
+    });
 
-  })
-})
+    describe('when there are handlebars tokens in the values', function(){
+      process.env.NODE_ENV = 'production';
+      process.env.PORT = 8080;
+      var app = train(appPath);
+
+      it('should inject an environment variable into the token', function(){
+        app.config.http.port.should.equal(process.env.PORT);
+      });
+    });
+  });
+});
