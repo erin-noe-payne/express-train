@@ -36,4 +36,14 @@ describe('train app', function(){
       });
     });
   });
+
+  describe('init', function(){
+    describe('on app create', function(){
+      var app = train(appPath);
+      it('should load and execute files in the init directory', function(){
+        // assumes the file in appdir/init will add this simple value
+        should.exist(app.initValue);
+      })
+    })
+  });
 });
