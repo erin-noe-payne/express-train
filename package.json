@@ -12,8 +12,8 @@
       "email": "saizul@gmail.com"
     },
     {
-      "name": "Paul Vencil",
-      "email": ""
+      "name": "Paul Vencill",
+      "email": "paul.vencill@gmail.com"
     }
   ],
   "dependencies": {
@@ -22,9 +22,13 @@
     "express": "latest",
     "underscore": "latest",
     "commander": "latest",
-    "nodemon": "latest"
+    "nodemon": "latest",
+    "handlebars": "~1.0.7"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "mocha": "latest",
+    "should": "latest"
+  },
   "keywords": [
     "express",
     "train",

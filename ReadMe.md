@@ -39,7 +39,8 @@ app
 
 bin                 -- executable scripts
 doc                 -- documentation
-config              -- sample configuration files
+config              -- environmental configuration files
+init                -- files that will run after configuration, to help initialize the state of the app
 test                -- tests
 
 package.json        -- npm package.json (needs to have express-train as a dependency)
@@ -50,7 +51,7 @@ constants.json      -- universal application configuration file
 For a fully functioning example, you can view [express-train-template](https://github.com/autoric/express-train-template). This is the default project scaffolding
 that ships with Express Train.
 
-## Modules (controllers, models, middleware and libs)
+## Modules (controllers, models, middleware, inits and libs)
 
 All express-train modules will have the following signature
 
@@ -78,7 +79,7 @@ module.exports = function (app) {
 }
 ```
 
-Following the same an example, a controller might look like:
+Following the same example, a controller might look like:
 ```javascript
 // controllers/Home.js
 
@@ -111,31 +112,9 @@ module.exports = function (app) {
 Express Train does a small amount of magic to glue your files together.  The app argument received by each of your
 modules is an express 3 application and conforms entirely to the [express api](http://expressjs.com/api.html).
 
-On top of the standard express application, express train autoloads files from the project to extend the app
-object in this order:
-    - .env.js -> app.config
-    - app/models -> app.models
-    - app/middleware -> app.middleware
-    - app/controllers -> app.controllers
-    - app/lib (lib files are not loaded onto an object, but are invoked before app start)
+Module loading is designed to be fairly flexible.  If you do not define an index.js, the loader will just call require() on each file in the directory and if that module returns a function as described above it will call that function and pass it the app instance.  If you want to take more control of which files are loaded or in what order they are loaded, you can add an index.js file. Index.js may conform to one of two signatures:
 
-### Constants and Configuration
-
-Application constants - configuration values that will not change from one environment / deployment to the next -
-are written to constants.json.
-
-Environmental configuration is stored in .env.json. These should be values specific to an environment,
-such as database connection strings, http / https settings, port number, etc. Sample configuration files are kept in
-the config directory.  By default, .env.json is in .gitignore and will be generated in the environment based on the NODE_ENV variable set in that environment the first time the application starts.  The json object is loaded directly on to app.config.
-
-### Models, middleware, controllers
-
-By default, modules are loaded to these hashes based on their file name (models/Users.js is loaded on to app.models
-.Users;  controllers/home.js to app.controllers.home and so on). However, if you want to take more control
-you can add an index.js file. Index.js may conform to one of two signatures:
-
- - Express train module. This gives you the most control - and the resulting hash on app.models / middleware /
-controllers will match the return value of the function.
+ - Express train module. This gives you the most control 
 
 ```javascript
 
@@ -157,6 +136,42 @@ but may be important if there are interdependencies between models.
 
 module.exports = ['Users', 'Blogs', 'Orders'];
 ```
+
+On top of the standard express application, express train autoloads files from the project to extend the app in this order
+object in this order:
+    - config/[NODE_ENV].json -> app.config
+    - init (init files are not loaded onto an object, but are invoked right after config)
+    - app/models -> app.models
+    - app/middleware -> app.middleware
+    - app/controllers -> app.controllers
+    - app/lib (lib files are not loaded onto an object, but are invoked before app start)
+
+### Constants and Configuration
+
+Application constants - configuration values that will not change from one environment / deployment to the next -
+are written to constants.json.
+
+Environmental configuration is stored by default in the config directory. These should be values specific to an environment,
+such as database connection strings, http / https settings, port number, etc. When the application starts, it inspects NODE_ENV environmental variable and looks for a .json file in the config directory with a corresponding name (e.g. config/production.json).  If one is not found, it will look for config/default.json.   Because some web hosts expect apps to extract configuration parameters such as port number from environmental variables they set, express-train config file values will be compiled as handlebars templates with the environmental variables provided as data for the template.  As an example, if the environment is exposing a variable named MONGO_URL that represents the connection string for your MongoDB instance, your config file might have the following entry:
+
+```javascript
+{
+  "mongoUrl": "{{MONGO_URL}}"
+}
+```
+
+When config is complete, the values are all loaded on the app.config object, and so app.config.mongoUrl would evaluate to the value provided by the environment variable.
+
+### Init
+
+Initialization logic for the application which needs to happen after configs have been loaded, but before other modules have been loaded.  Examples include setting up a database connection or loading global functions that you expect to be used by other modules (e.g. a logging provider). 
+
+
+### Models, middleware, controllers
+
+By default, modules are loaded to these hashes based on their file name (models/Users.js is loaded on to app.models
+.Users;  controllers/home.js to app.controllers.home and so on). However, as mentioned in Autoloading, if you want to take more control
+you can add an index.js file.
 
 ### Lib
 
@@ -184,6 +199,8 @@ $ train
 ```
 
 ### train boilerplate
+
+Express Train uses [boilerplate](https://github.com/pvencill/boilerplate) under the hood to generate your app.  It exposes that underlying functionality for your convenience
 
 - register <alias> <source>
 - unregister <alias>
