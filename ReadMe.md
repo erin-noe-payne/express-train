@@ -30,6 +30,7 @@ An express train project starts with a specific file structure:
 ```
 app
   /controllers      -- application controllers (automatically loaded onto app.controllers)
+  /init             -- modules to initialize your application (after configs, before models, etc are loaded)
   /lib              -- application specific modules you will use to glue your app together
   /middleware       -- application middleware (automatically loaded onto app.middleware)
   /models           -- application models (automatically loaded onto app.models)
@@ -44,8 +45,6 @@ init                -- files that will run after configuration, to help initiali
 test                -- tests
 
 package.json        -- npm package.json (needs to have express-train as a dependency)
-constants.json      -- universal application configuration file
-.env.js             -- environment-specific configuration file
 ```
 
 For a fully functioning example, you can view [express-train-template](https://github.com/autoric/express-train-template). This is the default project scaffolding
@@ -146,10 +145,7 @@ object in this order:
     - app/controllers -> app.controllers
     - app/lib (lib files are not loaded onto an object, but are invoked before app start)
 
-### Constants and Configuration
-
-Application constants - configuration values that will not change from one environment / deployment to the next -
-are written to constants.json.
+### Configuration
 
 Environmental configuration is stored by default in the config directory. These should be values specific to an environment,
 such as database connection strings, http / https settings, port number, etc. When the application starts, it inspects NODE_ENV environmental variable and looks for a .json file in the config directory with a corresponding name (e.g. config/production.json).  If one is not found, it will look for config/default.json.   Because some web hosts expect apps to extract configuration parameters such as port number from environmental variables they set, express-train config file values will be compiled as handlebars templates with the environmental variables provided as data for the template.  As an example, if the environment is exposing a variable named MONGO_URL that represents the connection string for your MongoDB instance, your config file might have the following entry:
@@ -164,8 +160,7 @@ When config is complete, the values are all loaded on the app.config object, and
 
 ### Init
 
-Initialization logic for the application which needs to happen after configs have been loaded, but before other modules have been loaded.  Examples include setting up a database connection or loading global functions that you expect to be used by other modules (e.g. a logging provider). 
-
+Initialization logic for the application which needs to happen after configs have been loaded, but before other modules have been loaded.  Examples include setting up a database connection, setting application constants, or loading global functions that you expect to be used by other modules (e.g. a logging provider). 
 
 ### Models, middleware, controllers
 
@@ -198,21 +193,22 @@ The cli is now available via
 $ train
 ```
 
-### train boilerplate
-
-Express Train uses [boilerplate](https://github.com/pvencill/boilerplate) under the hood to generate your app.  It exposes that underlying functionality for your convenience
-
-- register <alias> <source>
-- unregister <alias>
-
-### train new <destination>
-
-Creates a new Express Train application 
-
+We are working on more documentation for the cli. In the meantime, use --help to view commands and options.
 
 ## Programmatic API
 
+**train(directory)**
 
+*directory* - The root directory of a correctly formatted express-train file structure.
+
+Creates an express train application, autoloading configuration, models, etc. Returns the app object, with is en express js server with the documented express-train modifications.
+
+```javascript
+var train = require('express-train');
+
+var app = train(__dirname);
+app.start();
+```
 
 # Credits
 
