@@ -23,6 +23,7 @@ module.exports = function (program) {
         var destination = path.resolve(process.cwd(), destination);
 
         boilerplate.generate(source, destination, function (err, stdout) {
+            if(err) return console.error(err);
             console.log(stdout);
             var install = ps.spawn('npm',['install', (cmd.verbose?'--verbose':'')], {
                 cwd: destination
@@ -40,7 +41,6 @@ module.exports = function (program) {
 
 function registerTemplates(){
     _.each(templates, function(source, alias){
-        console.log(alias, boilerplate.view(alias));
         if(!boilerplate.view(alias)){
             boilerplate.register(alias, source);
         }
