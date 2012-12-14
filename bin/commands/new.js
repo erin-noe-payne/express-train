@@ -40,7 +40,6 @@ module.exports = function (program) {
 
 function registerTemplates(){
     _.each(templates, function(source, alias){
-        console.log(alias, boilerplate.view(alias));
         if(!boilerplate.view(alias)){
             boilerplate.register(alias, source);
         }
