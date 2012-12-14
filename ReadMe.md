@@ -30,7 +30,7 @@ An express train project starts with a specific file structure:
 ```
 app
   /controllers      -- application controllers (automatically loaded onto app.controllers)
-  /init             -- modules to initialize your application (after configs, before models, etc are loaded)
+  /init             -- files that will run after configuration, to help initialize the state of the app
   /lib              -- application specific modules you will use to glue your app together
   /middleware       -- application middleware (automatically loaded onto app.middleware)
   /models           -- application models (automatically loaded onto app.models)
@@ -41,7 +41,6 @@ app
 bin                 -- executable scripts
 doc                 -- documentation
 config              -- environmental configuration files
-init                -- files that will run after configuration, to help initialize the state of the app
 test                -- tests
 
 package.json        -- npm package.json (needs to have express-train as a dependency)
@@ -136,14 +135,14 @@ but may be important if there are interdependencies between models.
 module.exports = ['Users', 'Blogs', 'Orders'];
 ```
 
-On top of the standard express application, express train autoloads files from the project to extend the app in this order
-object in this order:
-    - config/[NODE_ENV].json -> app.config
-    - init (init files are not loaded onto an object, but are invoked right after config)
-    - app/models -> app.models
-    - app/middleware -> app.middleware
-    - app/controllers -> app.controllers
-    - app/lib (lib files are not loaded onto an object, but are invoked before app start)
+On top of the standard express application, express train autoloads files from the project to extend the app object in this order:
+
+- config/[NODE_ENV].json -> app.config
+- app/init (init files are not loaded onto an object, but are invoked right after config)
+- app/models -> app.models
+- app/middleware -> app.middleware
+- app/controllers -> app.controllers
+- app/lib (lib files are not loaded onto an object, but are invoked before app start)
 
 ### Configuration
 
