@@ -10,7 +10,7 @@ module.exports = function(program) {
         var appPath = path.join('./app');
 
         //todo excvp() error?
-        var nodemon = spawn('node_modules/.bin/nodemon', [cmd.debug?'--debug':'', appPath],{
+        var nodemon = spawn('./node_modules/express-train/node_modules/.bin//nodemon', [cmd.debug?'--debug':'', appPath],{
             cwd: process.cwd()
         });
 
