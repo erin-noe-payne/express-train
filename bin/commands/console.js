@@ -11,7 +11,7 @@ module.exports = function(program) {
         var app = train(appPath);
 
         var context = repl.start({
-            prompt: app.constants.name+'> ',
+            prompt: '> ',
             input: process.stdin,
             output: process.stdout
         }).context;
