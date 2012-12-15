@@ -22,7 +22,6 @@
     "express": "latest",
     "underscore": "latest",
     "commander": "latest",
-    "nodemon": "latest",
     "handlebars": "~1.0.7"
   },
   "devDependencies": {

@@ -3,20 +3,23 @@ var repl = require('repl'),
     train = require('../../lib/app');
 
 module.exports = function(program) {
-    var cmd = program.command('console');
+    var cmd = program.command('console')
+            .usage('opens an interactive node console with the your express train application available as "app"');
 
     //TODO: implement sandbox?
     cmd.action(function(){
         var appPath = path.join(process.cwd(), '/app');
         var app = train(appPath);
 
-        var context = repl.start({
+        var r = repl.start({
             prompt: '> ',
             input: process.stdin,
             output: process.stdout
-        }).context;
+        });
 
-        context.app = app;
+        r.on('exit', process.exit);
+
+        r.context.app = app;
     });
 
 }
