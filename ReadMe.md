@@ -99,17 +99,17 @@ module.exports = function (app) {
 
 ## Autoloading and Application Lifecycle
 
-The app argument received by each of your modules is an express 3 application - find the documentation at the [express api](http://expressjs.com/api.html). On top of the standard express application, Express Train autoloads files from the project to extend the app. At several stages, lifecycle events are fired, which are used to determine when your [autoloaded lib files are invoked][Lib].
+The app argument received by each of your modules is an express 3 application - find the documentation at the [express api](http://expressjs.com/api.html). On top of the standard express application, Express Train autoloads files from the project to extend the app. At several stages, lifecycle events are fired, which are used to determine when your autoloaded lib files are invoked.
 
 - app/lib (libs are registered to be autoloaded at a lifecycle event, according to an index.js file you define)
 - config/[NODE_ENV].json -> app.config
-- lifecycle event: 'config' (you may want to initiate logging or db connections here)
+  - lifecycle event: 'config' (you may want to initiate logging or db connections here)
 - app/models -> app.models
 - app/middleware -> app.middleware
 - app/controllers -> app.controllers
-- lifecycle event: 'load' (set up middleware stack, route handlers, etc)
+  - lifecycle event: 'load' (set up middleware stack, route handlers, etc)
 - application start
-- lifecycle event: 'start' (set up socket.io or other functionality requiring the http server)
+  - lifecycle event: 'start' (set up socket.io or other functionality requiring the http server)
 
 
 
@@ -184,7 +184,8 @@ We are working on more documentation for the cli. In the meantime, use --help to
 **train(directory, [locations])**
 
 *directory* - The root directory of a correctly formatted express-train file structure.
-*[locations]* - Object representing the location of directories and configuration files relative to the application directory. Allows you to override Express Train defaults for autoloading locations. Possible locations and their default values:
+
+*locations* - Object representing the location of directories and configuration files relative to the application directory. Allows you to override Express Train defaults for autoloading locations. Possible locations and their default values:
 
 ```
 {
