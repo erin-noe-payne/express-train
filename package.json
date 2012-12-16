@@ -22,7 +22,8 @@
     "express": "latest",
     "underscore": "latest",
     "commander": "latest",
-    "handlebars": "~1.0.7"
+    "handlebars": "~1.0.7",
+    "winston":"latest"
   },
   "devDependencies": {
     "mocha": "latest",
