@@ -207,6 +207,7 @@ Creates an express train application, autoloading configuration, models, etc. Re
 ```javascript
 var train = require('express-train');
 
+//setup an application with a custom config file location
 var app = train(__dirname, { config: '/etc/labs/config.json'});
 app.start();
 ```
@@ -214,3 +215,15 @@ app.start();
 # Credits
 
 Express Train was heavily influenced by the work of Skookum and [Base12](https://github.com/Skookum/base12).  Many thanks for sharing their work and ideas with the community!
+
+#License
+
+(The MIT License)
+
+Copyright (c) 2012 Erin Noe-Payne
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the 'Software'), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
