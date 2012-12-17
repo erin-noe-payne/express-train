@@ -9,7 +9,7 @@ module.exports = function(program) {
     //TODO: implement sandbox?
     cmd.action(function(){
         var appPath = path.join(process.cwd(), '/app');
-        var app = train(appPath);
+        var app = require(appPath);
 
         var r = repl.start({
             prompt: '> ',
