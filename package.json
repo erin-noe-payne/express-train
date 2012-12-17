@@ -1,56 +1,56 @@
 {
-    "name":"express-train",
-    "description":"express 3 framework",
-    "version":"0.0.7",
-    "author":{
-        "name":"Erin Noe-Payne",
-        "email":"saizul@gmail.com"
+  "name": "express-train",
+  "description": "express 3 framework",
+  "version": "0.0.8",
+  "author": {
+    "name": "Erin Noe-Payne",
+    "email": "saizul@gmail.com"
+  },
+  "contributors": [
+    {
+      "name": "Erin Noe-Payne",
+      "email": "saizul@gmail.com"
     },
-    "contributors":[
-        {
-            "name":"Erin Noe-Payne",
-            "email":"saizul@gmail.com"
-        },
-        {
-            "name":"Paul Vencill",
-            "email":"paul.vencill@gmail.com"
-        }
-    ],
-    "dependencies":{
-        "boilerplate":"latest",
-        "connect":"latest",
-        "express":"latest",
-        "underscore":"latest",
-        "commander":"latest",
-        "handlebars":"~1.0.7",
-        "winston":"latest",
-        "nodemon":"latest"
-    },
-    "devDependencies":{
-        "mocha":"latest",
-        "should":"latest"
-    },
-    "keywords":[
-        "express",
-        "train",
-        "framework",
-        "web",
-        "webapp"
-    ],
-    "repository":{
-        "type":"git",
-        "url":"https://github.com/autoric/express-train"
-    },
-    "main":"./lib/app.js",
-    "bin":{
-        "train":"./bin/train"
-    },
-    "scripts":{
-        "prepublish":"npm prune"
-    },
-    "engines":{
-        "node":">= 0.6.0"
-    },
-    "_id":"express-train@0.0.1",
-    "_from":"express-train@0.0.1"
+    {
+      "name": "Paul Vencill",
+      "email": "paul.vencill@gmail.com"
+    }
+  ],
+  "dependencies": {
+    "boilerplate": "latest",
+    "connect": "latest",
+    "express": "latest",
+    "underscore": "latest",
+    "commander": "latest",
+    "handlebars": "~1.0.7",
+    "winston": "latest",
+    "nodemon": "latest"
+  },
+  "devDependencies": {
+    "mocha": "latest",
+    "should": "latest"
+  },
+  "keywords": [
+    "express",
+    "train",
+    "framework",
+    "web",
+    "webapp"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/autoric/express-train"
+  },
+  "main": "./lib/app.js",
+  "bin": {
+    "train": "./bin/train"
+  },
+  "scripts": {
+    "prepublish": "npm prune"
+  },
+  "engines": {
+    "node": ">= 0.6.0"
+  },
+  "_id": "express-train@0.0.1",
+  "_from": "express-train@0.0.1"
 }
