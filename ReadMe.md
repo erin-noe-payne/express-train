@@ -103,13 +103,13 @@ The app argument received by each of your modules is an express 3 application - 
 
 - app/lib (libs are registered to be autoloaded at a lifecycle event, according to an index.js file you define)
 - config/[NODE_ENV].json -> app.config
-  - lifecycle event: 'config' (you may want to initiate logging or db connections here)
+  - lifecycle event: 'init' (you may want to initiate logging or db connections here)
 - app/models -> app.models
 - app/middleware -> app.middleware
 - app/controllers -> app.controllers
-  - lifecycle event: 'load' (set up middleware stack, route handlers, etc)
-- application start
-  - lifecycle event: 'start' (set up socket.io or other functionality requiring the http server)
+  - lifecycle event: 'setup' (set up middleware stack, route handlers, etc)
+- application start -> app.server (node http server instance)
+  - lifecycle event: 'start' (set up socket.io or other functionality requiring app.server)
 
 
 
@@ -149,14 +149,14 @@ To configure autoloading, Express Train uses an index.js or index.json file. Thi
 
 ```javascript
 module.exports = {
-    config: 'logging',
-    load: ['views', 'routes', 'middleware'],
-    start: 'socketio'
+    onInit: 'logging',
+    onSetup: ['views', 'routes', 'middleware'],
+    onStart: 'socketio'
 }
 /*
-    'config' event: app.config is now available. lib/logging.js will be loaded
-    'load' event: app.models, app.middleware, app.controllers are now available. lib/views.js, lib/routes.js, lib/middleware.js will be loaded in that order
-    'start' event: app.server, a node htttp server is now available. lib/socketio will be loaded
+    'init' event: app.config is now available. lib/logging.js will be loaded
+    'setup' event: app.models, app.middleware, app.controllers are now available. lib/views.js, lib/routes.js, lib/middleware.js will be loaded in that order
+    'start' event: app.server, a node htttp server is now available. lib/socketio.js will be loaded
 */
 ```
 
@@ -177,7 +177,7 @@ The cli is now available via
 $ train
 ```
 
-We are working on more documentation for the cli. In the meantime, use --help to view commands and options.
+We are working on better documentation for the cli. In the meantime, use --help to view commands and options.
 
 ## Programmatic API
 
