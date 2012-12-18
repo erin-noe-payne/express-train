@@ -1,7 +1,7 @@
 {
   "name": "express-train",
   "description": "express 3 framework",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "author": {
     "name": "Erin Noe-Payne",
     "email": "saizul@gmail.com"
