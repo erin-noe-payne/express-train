@@ -7,6 +7,11 @@ To get started:
 npm install -g express-train
 ```
 
+Then create a new project by typing 
+
+```
+train new projname
+```
 
 # Why use Express Train?
 
