@@ -10,7 +10,7 @@ npm install -g express-train
 Then create a new project by typing 
 
 ```
-train new projname
+train new <projname>
 ```
 
 # Why use Express Train?
