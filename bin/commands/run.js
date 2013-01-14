@@ -5,9 +5,13 @@ module.exports = function (program) {
         .usage("runs the express train application");
 
     cmd.action(function () {
-        var appPath = path.join(process.cwd(), '/app/index.js');
-
-        require(appPath).start();
+        try {
+            require(process.cwd());
+        }
+        catch(err) {
+            var appPath = path.join(process.cwd(), '/app/index.js');
+            require(appPath).start();
+        }
     });
 
 }

@@ -10,10 +10,20 @@ module.exports = function (program) {
         .option('-d, --debug', 'Node process will listen on debug port');
 
     cmd.action(function () {
+        //todo: support main or index.js using require.resolve( process.cwd() );
         var appPath = path.join(process.cwd(), '/app/index.js');
-        var runnerPath = path.join('./node_modules/express-train/lib/runner')
+        var args = [];
 
-        var args = [runnerPath, appPath];
+        try {
+            appPath = require.resolve(process.cwd());
+            args = [appPath];
+        }
+        catch(err){
+            var runnerPath = path.join('./node_modules/express-train/lib/runner')
+            args = [runnerPath, appPath];
+        }
+
+
         if(cmd.debug) {
             args.unshift('--debug');
         }
