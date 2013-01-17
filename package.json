@@ -36,7 +36,8 @@
     "train",
     "framework",
     "web",
-    "webapp"
+    "webapp",
+    "MVC"
   ],
   "repository": {
     "type": "git",
