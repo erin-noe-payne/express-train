@@ -10,7 +10,6 @@ var templates = {
     'default': 'train'
 }
 
-
 module.exports = function (program) {
     var cmd = program.command('new <destination>')
         .option('-b, --boilerplate', 'A valid boilerplate to use for the new project')
@@ -33,7 +32,7 @@ module.exports = function (program) {
             install.stderr.pipe(process.stderr);
             install.on('exit', function(){
                 console.log('express train app is ready!');
-                console.log('go to %s to get started', destination);
+                console.log('go to %s and type "train run" to get started', destination);
             })
         });
     });

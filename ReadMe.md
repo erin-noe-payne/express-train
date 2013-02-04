@@ -183,10 +183,65 @@ npm install -g express-train
 
 The cli is now available via
 ```sh
-$ train
+$ train <command>
 ```
 
-We are working on better documentation for the cli. In the meantime, use --help to view commands and options.
+All commands support --help for inline help on usage and options.
+
+### train new <destination> [options]
+
+Creates a new train project at the destination folder. Supports the following options:
+
+- `-b, --boilerplate` Specify the project boilerplate to use. If left blank, will use your 'default' boilerplate - on install this will be the standard express train template. However you can specify any valid git url (will be cloned to make your new project), local directory (will be copied to make your new project) to be used as a template, or registered alias. See documentation on train boilerplate for more info.
+- `-v, --verbose' Verbose output
+
+### train run
+
+This is a convenience method to start your application. Run from the root directory of an express trian project it will attempt to resolve a main file via package.json's main property or an index.js file in your application root directory, so in most cases it will be equivalent to `node .`. Otherwise it will require app/index.js and invoke the start() method.
+
+### train cycle
+
+Like train run, this is a convenience method for development. The app file will be resolved in the same way as run, but will be invoked using nodemon to stop / start the application on file changes.
+
+### train console
+
+Starts a standard node console in the context of your express train application. Adds the app object to the global scope for easy testing / experimenting / development.  Also supports repl history for ease of use.
+
+### train boilerplate <command>
+
+Express train supports the concept of boilerplates. These are project templates that can be specified when you generate a new express train project. For example, you may have one template that you like to use for mobile applications, and another for realtime apps with socket.io.  A boilerplate is just a valid express train directory structure with any customizations or standard configuration you want to put in place. A boilerplate can be defined as a local directory structure that will be copied, or a git url which will be cloned.
+
+### train boilerplate register <alias> <source>
+
+Registers any valid directory or git url as a source with he given alias. On install express train provides two boilerplates - basic and train. It also registers 'train' as the default boilerplate that will be used in the absence of a -b option on train new.
+
+```
+train boilerplate register mobileTemplate ~/local/mobileTemplate
+train boilerplate register singlePageApp https://github.com/autoric/example-template.git
+train boilerplate register default singlePageApp
+
+train new -b mobileTemplate
+# creates a new project using mobileTemplate as the boilerplate
+
+train new -b singlePageApp
+# creates a new project using singlePageApp as the boilerplate
+
+train new
+# creates a new project using singlePageApp as the boilerplate
+```
+
+### train boilerplate view <alias>
+
+Returns the source for an alias.
+
+```
+train boilerplate view singlePageApp
+# returns https://github.com/autoric/example-template.git
+```
+
+### train boilerplate unregister <alias>
+
+Deletes the alias for your boilerplate.
 
 ## Programmatic API
 
