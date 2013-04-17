@@ -5,7 +5,7 @@ var boilerplate = require('boilerplate'),
     _ = require('underscore');
 
 var templates = {
-    'basic': '',
+    'basic': 'https://github.com/autoric/train-template-basic',
     'train': 'https://github.com/autoric/express-train-template',
     'default': 'train'
 }
