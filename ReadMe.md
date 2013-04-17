@@ -7,15 +7,13 @@ To get started:
 npm install -g express-train
 ```
 
-Then create a new project by typing: 
+Then create a new project by typing and get running! 
 
 ```
 train new <projname>
+cd projname
+train run
 ```
-
-That command will create a directory called `projname` that in turn has a fully scaffolded train app, and pulls the dependencies
-defined in the app template.  Express-train uses [Boilerplate](http://github.com/pvencill/boilerplate) for scaffolding the app, and lets you
-request a different template by passing a folder location or a git repo to the -b option.
 
 # Why use Express Train?
 
@@ -38,12 +36,13 @@ app
   /models           -- application models (automatically loaded onto app.models)
   /public           -- static content (html, js, css, etc)
   /views            -- view templates (loaded into express' view engine)
-  index.js          -- basic index file that will run your application
+  index.js          -- index file exports the express train application
 
 bin                 -- executable scripts
 doc                 -- documentation
 config              -- environmental configuration files
 test                -- tests
+index.js            -- index file that requires and starts the express train application
 
 package.json        -- npm package.json (needs to have express-train as a dependency)
 ```
