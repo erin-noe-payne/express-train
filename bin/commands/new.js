@@ -12,7 +12,7 @@ var templates = {
 
 module.exports = function (program) {
     var cmd = program.command('new <destination>')
-        .option('-b, --boilerplate', 'A valid boilerplate to use for the new project')
+        .option('-b, --boilerplate <source>', 'A valid boilerplate to use for the new project')
         .option('-v, --verbose', 'Verbose output');
 
     cmd.action(function (destination) {

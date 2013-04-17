@@ -17,7 +17,9 @@ module.exports = function(program){
 
     cmd.command('view <alias>')
         .usage('show the source for a boilerplate alias')
-        .action(boilerplate.view);
+        .action(function(alias){
+            console.log(boilerplate.view(alias));
+        });
 
     cmd.action(function(){
         var args = process.argv.slice(1);
