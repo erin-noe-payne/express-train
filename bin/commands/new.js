@@ -21,9 +21,8 @@ module.exports = function (program) {
         var source = cmd.boilerplate || 'default';
         var destination = path.resolve(process.cwd(), destination);
 
-        boilerplate.generate(source, destination, function (err, stdout) {
+        boilerplate.generate(source, destination, function (err) {
             if(err) return console.error(err);
-            console.log(stdout);
             var install = ps.spawn('npm',['install', (cmd.verbose?'--verbose':'')], {
                 cwd: destination
             });
