@@ -5,9 +5,10 @@ var boilerplate = require('boilerplate'),
     _ = require('underscore');
 
 var templates = {
-    'basic': 'https://github.com/autoric/train-template-basic',
-    'train': 'https://github.com/autoric/express-train-template',
-    'default': 'train'
+    'train-template-basic':path.resolve(__dirname, '../../boilerplates/basic'),
+    'train-template-standard':path.resolve(__dirname, '../../boilerplates/standard'),
+    'basic':'train-template-basic',
+    'default':'train'
 }
 
 module.exports = function (program) {
@@ -22,14 +23,14 @@ module.exports = function (program) {
         var destination = path.resolve(process.cwd(), destination);
 
         boilerplate.generate(source, destination, function (err) {
-            if(err) return console.error(err);
-            var install = ps.spawn('npm',['install', (cmd.verbose?'--verbose':'')], {
-                cwd: destination
+            if (err) return console.error(err);
+            var install = ps.spawn('npm', ['install', (cmd.verbose ? '--verbose' : '')], {
+                cwd:destination
             });
 
             install.stdout.pipe(process.stdout);
             install.stderr.pipe(process.stderr);
-            install.on('exit', function(){
+            install.on('exit', function () {
                 console.log('express train app is ready!');
                 console.log('go to %s and type "train run" to get started', destination);
             })
@@ -37,10 +38,10 @@ module.exports = function (program) {
     });
 }
 
-function registerTemplates(){
-    _.each(templates, function(source, alias){
-        if(!boilerplate.view(alias)){
-            boilerplate.register(alias, source);
-        }
-    });
+function registerTemplates() {
+    boilerplate.register('basic', path.resolve(__dirname, '../../boilerplates/basic'));
+    boilerplate.register('train', path.resolve(__dirname, '../../boilerplates/standard'));
+    if (!boilerplate.view('default')) {
+        boilerplate.register('default', 'train');
+    }
 }
