@@ -25,7 +25,8 @@
     "handlebars": "~1.0.7",
     "winston": "latest",
     "nodemon": "latest",
-    "repl.history": "latest"
+    "repl.history": "latest",
+      "nject":"latest"
   },
   "devDependencies": {
     "mocha": "latest",
