@@ -1,0 +1,13 @@
+{
+    "cookie_secret":"mysecret",
+    "session":{
+        "key":"mykey",
+        "secret": "mysecret"
+    },
+    "request_timeout":1000,
+    "port":4000,
+    "mongodb":{
+        "uri":"mongodb://localhost:27017/express-train"
+    },
+    "character_encoding":"utf-8"
+}
