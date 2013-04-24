@@ -32,6 +32,9 @@ module.exports = function (app) {
     app.use(express.bodyParser());                                      // req.body & req.files
     app.use(express.methodOverride());                                  // '_method' property in body (POST -> DELETE / PUT)
     app.use(app.router);                                                // routes in lib/routes.js
+    app.use(function(req, res, next){                                   // barebones 404 handler
+        res.send(404);
+    });
 
     // Handle errors thrown from middleware/routes
     app.use(error_middleware);
