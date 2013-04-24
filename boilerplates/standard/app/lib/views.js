@@ -7,7 +7,7 @@ module.exports = function (app) {
     app.set('view engine', 'hbs');
 
     app.engine('hbs', hbs.express3({
-        partialsDir:path.join(app.dir, "/views/partials")
+        partialsDir:path.join(__dirname, "../views/partials")
     }));
 
     // Static locals
