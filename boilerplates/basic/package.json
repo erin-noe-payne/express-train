@@ -14,8 +14,8 @@
     "devDependencies": {
         "mocha": "latest"
     },
-    "main": "index.js",
+    "main": "./app/index.js",
     "scripts": {
-        "start": "./index.js"
+        "start": "./app/index.js"
     }
 }

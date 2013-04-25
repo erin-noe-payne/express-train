@@ -1,1 +1,0 @@
-require('./app/index.js').start();

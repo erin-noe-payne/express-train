@@ -1,6 +1,6 @@
 //var resource = require('express-resource');
 
-module.exports = function (app, ApiController, HomeController) {
+module.exports = function (app, ApiController, HomeController, models) {
 
     // Home
     //app.resource(app.controllers.home);
@@ -18,7 +18,7 @@ module.exports = function (app, ApiController, HomeController) {
     //whenever a router parameter :model is matched, this is run
     app.param('model', function(req, res, next, model) {
         //TODO: what instead?
-        var Model = app.models[model];
+        var Model = models[model];
         if(Model === undefined) {
             //if the request is for a model that does not exist, 404
             return res.send(404);
