@@ -1,4 +1,5 @@
 var repl = require('repl'),
+    _ = require('underscore'),
     path = require('path'),
     train = require('../../lib/app'),
     history = require('repl.history');
@@ -23,7 +24,7 @@ module.exports = function(program) {
 
         r.on('exit', process.exit);
 
-        r.context.app = app;
+        _.extend(r.context, app);
     });
 
 }
