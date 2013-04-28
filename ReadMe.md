@@ -126,7 +126,7 @@ module.exports = function (app, ApiController) {
 
 ## Dependencies and Application Lifecycle
 
-Express Train does not have a strict application lifecycle. Instead each module is registered and its dependencies are declared. At application startup, the depedency tree is built and modules are resolved in whatever order needed to make sure each module gets what it needs. In addition to your modules, there are a couple 'reserved' dependencies that can be injected into your files:
+Express Train does not have a strict application lifecycle. Instead each module is registered and its dependencies are declared. At application startup, the depedency tree is built and modules are resolved in whatever order needed to make sure each module gets what it needs. In addition to your modules, there are a couple 'reserved' dependencies provided by express train that can be injected into your modules:
 
  - app An [express 3 application] (http://expressjs.com/api.html).
  - models An object that aggregates all of the files from the models directory onto a hash. The key / value pairs are the filename and the resolved model.
@@ -179,7 +179,7 @@ Like train run, this is a convenience method for development. The app file will 
 
 ### train console
 
-Starts a standard node console in the context of your express train application. Adds the app object to the global scope for easy testing / experimenting / development.  Also supports repl history for ease of use.
+Starts a standard node console in the context of your express train application. All dependencies are available on the global scope for easier inspection and expirementing. (models/Users.js will be available as Users, ApiController.js as ApiController and so on).
 
 ### train boilerplate <command>
 
