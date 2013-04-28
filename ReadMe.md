@@ -17,7 +17,7 @@ train run
 
 # Why use Express Train?
 
-Because express is excellent, but it makes no decisions for you and does not enforce any structure.  The result can be a steep learning curve for new developers to node, or to a given project. Even very good developers using the same tools to build towards the same goals can end up with very different products. And individuals or organizations can struggle to define a repeatable process or consistent structure for their projects.
+Because express is excellent, but it makes no decisions for you and does not enforce any structure.  The result can be a steep learning curve for new developers to node, or to a given project. Even very good developers using the same tools to build towards the same goals can end up with very different products. And individuals or organizations can struggle to define a repeatable process or consistent structure for their web applications.
 
 Our goal is to provide a framework that will make some reasonable decisions to get a new project up and running quickly and give a consistent structure for your web applications, without asking you to sacrifice any of the flexibility you are used to from express.  We also aim to provide a powerful and fully featured set of CLI tools to set up project scaffolding, explore your application, and define custom boilerplates for any situation.
 
@@ -30,10 +30,10 @@ An express train project starts with a specific file structure:
 
 ```
 app
-  /controllers      -- application controllers (automatically loaded onto app.controllers)
-  /lib              -- application specific modules you will use to glue your app together
-  /middleware       -- application middleware (automatically loaded onto app.middleware)
-  /models           -- application models (automatically loaded onto app.models)
+  /controllers      -- application controllers (**autoinjected**)
+  /lib              -- application specific modules (**autoinjected**)
+  /middleware       -- application middleware (**autoinjected**)
+  /models           -- application models (**autoinjected**)
   /public           -- static content (html, js, css, etc)
   /views            -- view templates (loaded into express' view engine)
   index.js          -- index file exports the express train application
@@ -42,84 +42,95 @@ bin                 -- executable scripts
 doc                 -- documentation
 config              -- environmental configuration files
 test                -- tests
-index.js            -- index file that requires and starts the express train application
 
 package.json        -- npm package.json (needs to have express-train as a dependency)
 ```
 
-For a fully functioning example, you can view [express-train-template](https://github.com/autoric/express-train-template). This is the default  project scaffolding that ships with Express Train.
+For a fully functioning example, you can view the [express train standard template](https://github.com/autoric/express-train/tree/1.x/boilerplates/standard). This is the default  project scaffolding that ships with Express Train.
 
 ## Modules (controllers, models, middleware, and libs)
 
-All express-train modules will have the following signature
+**File names and variable names matter.** All files in the models, controllers, middleware, and lib directories are subject to autoinjection. To read about the exact mechanics check out [nject] (https://github.com/autoric/nject). Within the project, it means that...
 
-```javascript
-module.exports = function(app) {
-  var model = {/*...*/}
-  return model;
-}
+ - Each of those directories is scanned recursively and each file is registered by filename as a dependency. Therefore no two files should have the same name.
+ - Any module that exports an object will be registered as a constant.
+ - Any module that exports a function will have dependencies injected by variable name. The function arguments will be matched against the registered dependencies (by file name). The return value of the function will be used when it is referenced as a dependency.
+
+For an example, consider this project...
+
+```
+# ApiController, HomeController, routes, Authentication, Users and Blogs are registered.
+app
+  /controllers
+    ApiController.js
+    HomeController.js
+  /lib
+    routes.js
+  /middleware
+    Authentication.js
+  /models
+    Users.js
+  /public
+  /views
+  index.js
 ```
 
-An example model using [mongoose](https://github.com/LearnBoost/mongoose):
 ```javascript
 // models/Users.js
 
 var mongoose = require('mongoose');
 
-module.exports = function (app) {
+/* This module has no dependencies */
+module.exports = function () {
     var UserSchema = new mongoose.Schema({
         username:{ type:String, required:true, unique:true },
         email:{ type:String, required:false, unique:false },
         password:{ type:String, required:true}
     });
 
+    /* This return value is what will be injected when Users is referenced */
     return mongoose.model('users', UserSchema);
 }
 ```
 
-Following the same example, a controller might look like:
 ```javascript
-// controllers/Home.js
+// controllers/ApiController.js
 
-module.exports = function (app) {
-    var Users = app.models.Users;
+/* The Users variable is injected with the return value from Users.js, a mongoose model */
+module.exports = function (Users) {
 
-    var controller = {};
-
-    controller.index = function (req, res, next) {
-            var username = req.params.username;
-            Users.findOne({username:username}, {password:0}).exec(function (err, user) {
-                if (err) return next(err);
-                if (user === null) return res.send(404);
-                res.locals.user = user;
-                res.render('index');;
-            })
-        }
-
-    controller.signup = function (req, res, next) {
-            res.render('signup');
-        }
-
-
-    return controller;
+    return {
+        read: function(req, res, next) {
+            Users.find(...);
+        },
+        create: function(req, res, next) {
+            Users.create(...)
+        },
+        ...
+    }
 }
 ```
 
-## Autoloading and Application Lifecycle
+```javascript
+// lib/routes.js
 
-The app argument received by each of your modules is an express 3 application - find the documentation at the [express api](http://expressjs.com/api.html). On top of the standard express application, Express Train autoloads files from the project to extend the app. At several stages, lifecycle events are fired, which are used to determine when your autoloaded lib files are invoked.
+/* app is a dependency provided by express train and is you express application.
+   ApiController is injected with the return value from ApiController.js */
+module.exports = function (app, ApiController) {
 
-- app/lib (libs are registered to be autoloaded at a lifecycle event, according to an index.js file you define)
-- config/[NODE_ENV].json -> app.config
-  - lifecycle event: 'init' (you may want to initiate logging or db connections here)
-- app/models -> app.models
-- app/middleware -> app.middleware
-- app/controllers -> app.controllers
-  - lifecycle event: 'setup' (set up middleware stack, route handlers, etc)
-- application start -> app.server (node http server instance)
-  - lifecycle event: 'start' (set up socket.io or other functionality requiring app.server)
+    app.get('/api/Users', ApiController.read);
+    app.post('/api/Users/:id', ApiController.create)
 
+}
+```
 
+## Dependencies and Application Lifecycle
+
+Express Train does not have a strict application lifecycle. Instead each module is registered and its dependencies are declared. At application startup, the depedency tree is built and modules are resolved in whatever order needed to make sure each module gets what it needs. In addition to your modules, there are a couple 'reserved' dependencies that can be injected into your files:
+
+ - app An [express 3 application] (http://expressjs.com/api.html).
+ - models An object that aggregates all of the files from the models directory onto a hash. The key / value pairs are the filename and the resolved model.
+ - config Your project's configuration object...
 
 ### Configuration
 
@@ -132,42 +143,6 @@ Environmental configuration is stored by default in the config directory. These 
 ```
 
 When config is complete, the values are all loaded on the app.config object, and so app.config.mongoUrl would evaluate to the value provided by the environment variable.
-
-### Models, middleware, controllers
-
-By default, modules are loaded to these hashes based on their file name (models/Users.js is loaded on to app.models.Users;  controllers/home.js to app.controllers.home and so on). However if the directory contains an index.js file, that file will be loaded instead and override the default behavior, allowing you to take explicit control of the autoloading process. The index.js should be written as Express Train module. It will be invoked, and the return value will be loaded onto the corresponding hash.
-
-```javascript
-// models/index.js
-
-module.exports = function(app) {
-  return {
-    people: require('./Users')(app),
-    blogs: require('./Blogs')(app)
-  }
-}
-//app.models.people, app.models.blogs are now available
-```
-
-### Lib
-
-The app/lib directory will contain modules your application will use internally. Some of these, such as your routing and application middleware stack, you will want to autoload during application startup. Others you may not.
-
-To configure autoloading, Express Train uses an index.js or index.json file. This file will tell express train which lib modules to autoload at which lifecycle stages of the application startup. The return value should be a json object in which each key is a valid lifecycle stage, and each value is either a string or array of strings for the file to be autoloaded. The order declared will be the order loaded.
-
-```javascript
-module.exports = {
-    onInit: 'logging',
-    onSetup: ['views', 'routes', 'middleware'],
-    onStart: 'socketio'
-}
-/*
-    'init' event: app.config is now available. lib/logging.js will be loaded
-    'setup' event: app.models, app.middleware, app.controllers are now available. lib/views.js, lib/routes.js, lib/middleware.js will be loaded in that order
-    'start' event: app.server, a node htttp server is now available. lib/socketio.js will be loaded
-*/
-```
-
 
 # API
 
@@ -248,31 +223,53 @@ Deletes the alias for your boilerplate.
 
 *directory* - The root directory of a correctly formatted express-train file structure.
 
-*locations* - Object representing the location of directories and configuration files relative to the application directory. Allows you to override Express Train defaults for autoloading locations. Possible locations and their default values:
+*locations* - A configuration object representing the location of directories and configuration files relative to the application directory, which directories will be autoinjected and which will be aggregated. Allows you to override Express Train defaults. Possible locations and their default values:
 
 ```
 {
-    pkg: '../package.json',
-    config:'../config',
-    logs: '../logs',
-    models:'models',
-    views:'views',
-    lib:'lib',
-    controllers:'controllers',
-    pub:'public',
-    middleware:'middleware',
-    locals:'locals'
+    pkg:{
+        path: '../package.json'
+    },
+    config:{
+        path: '../config'
+    },
+    logs:{
+        path: '../logs'
+    },
+    views: {
+        path: 'views'
+    },
+    pub: {
+        path: 'public'
+    },
+    models: {
+        path: 'models',
+        autoinject: true,
+        aggregateOn: 'models'
+    },
+    lib: {
+        path: 'lib',
+        autoinject: true
+    },
+    controllers: {
+        path: 'controllers',
+        autoinject: true
+    },
+
+    middleware: {
+        path: 'middleware',
+        autoinject: true
+    }
 }
 ```
 
-Creates an express train application, autoloading configuration, models, etc. Returns the Express Train application, which has not been started yet.
+Creates and runs an express train application.
 
 ```javascript
 var train = require('express-train');
 
 //setup an application with a custom config file location
-var app = train(__dirname, { config: '/etc/labs/config.json'});
-app.start();
+train(__dirname, { config: {path: '/etc/myproject/config.json'}});
 ```
 
 # Credits
