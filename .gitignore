@@ -2,3 +2,4 @@
 node_modules/*
 npm-debug.log
 boilerplates/*/node_modules/*
+.console_history
