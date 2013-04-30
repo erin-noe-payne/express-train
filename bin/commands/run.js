@@ -10,7 +10,7 @@ module.exports = function (program) {
         }
         catch(err) {
             var appPath = path.join(process.cwd(), '/app/index.js');
-            require(appPath).start();
+            require(appPath)
         }
     });
 
