@@ -5,10 +5,16 @@ module.exports = function (program) {
         .usage("runs the express train application");
 
     cmd.action(function () {
+        var canResolve=false;
         try {
+            canResolve = require.resolve(process.cwd());
+        }
+        catch(e) {}
+
+        if(canResolve) {
             require(process.cwd());
         }
-        catch(err) {
+        else {
             var appPath = path.join(process.cwd(), '/app/index.js');
             require(appPath)
         }
