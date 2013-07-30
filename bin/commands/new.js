@@ -24,7 +24,7 @@ module.exports = function (program) {
 
         boilerplate.generate(source, destination, function (err) {
             if (err) return console.error(err);
-            var install = ps.spawn('npm', ['install', (cmd.verbose ? '--verbose' : '')], {
+            var install = ps.spawn( (process.platform !== 'win32'?  'npm' : 'npm.cmd'), ['install', (cmd.verbose ? '--verbose' : '')], {
                 cwd:destination
             });
 
