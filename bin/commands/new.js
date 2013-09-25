@@ -7,7 +7,9 @@ var boilerplate = require('boilerplate'),
 var templates = {
     'train-template-basic':path.resolve(__dirname, '../../boilerplates/basic'),
     'train-template-standard':path.resolve(__dirname, '../../boilerplates/standard'),
+    'train-template-coffee':path.resolve(__dirname, '../../boilerplates/coffee'),
     'basic':'train-template-basic',
+    'coffee':'train-template-coffee',
     'default':'train'
 }
 
