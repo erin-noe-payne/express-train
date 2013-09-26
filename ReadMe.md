@@ -128,7 +128,7 @@ module.exports = function (app, ApiController) {
 
 Express Train does not have a strict application lifecycle. Instead each module is registered and its dependencies are declared. At application startup, the depedency tree is built and modules are resolved in whatever order needed to make sure each module gets what it needs. In addition to your modules, there are a couple 'reserved' dependencies provided by express train that can be injected into your modules:
 
- - app An [express 3 application] (http://expressjs.com/api.html).
+ - app An [express 3 application] (http://expressjs.com/api.html). Note that for advanced use, you can [override app with a custom implementation](#overriding-app).
  - models An object that aggregates all of the files from the models directory onto a hash. The key / value pairs are the filename and the resolved model.
  - config Your project's configuration object...
 
@@ -223,7 +223,7 @@ Deletes the alias for your boilerplate.
 
 *directory* - The root directory of a correctly formatted express-train file structure.
 
-*locations* - A configuration object representing the location of directories and configuration files relative to the application directory, which directories will be autoinjected and which will be aggregated. Allows you to override Express Train defaults. Possible locations and their default values:
+*locations* - A configuration object representing the location of directories and configuration files relative to the application directory, which directories will be autoinjected and which will be aggregated. Allows you to override Express Train defaults. Default locations and their default values:
 
 ```
 {
@@ -270,6 +270,20 @@ var train = require('express-train');
 
 //setup an application with a custom config file location
 train(__dirname, { config: {path: '/etc/myproject/config.json'}});
+```
+## Overriding app
+
+In general, the "app" dependency is provided for you as an out-of-the box express application. However in some cases you may wish to override the value of app - for instance if you want to use a specific version of express, if you want to manually create an http server, or if you want to use another library like restify or express.io. In this case, all you need to do is create an app.js file with the standard express train module format in any directory that is being scanned for autoinject. This will be picked up and the export value will be used in place of the standard standard express app. 
+
+```
+//lib/app.js
+expressio = require('express.io');
+
+module.exports = function(){
+  var app = expressio();
+  return expressio();
+}
+
 ```
 
 # Credits
