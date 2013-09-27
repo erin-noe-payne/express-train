@@ -46,7 +46,8 @@
   },
   "main": "./lib/app.js",
   "bin": {
-    "train": "./bin/train"
+    "train": "./bin/train",
+    "test": "mocha test -r should --growl --reporter spec"
   },
   "scripts": {
     "prepublish": "npm prune"
