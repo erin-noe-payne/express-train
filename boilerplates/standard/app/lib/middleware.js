@@ -38,8 +38,4 @@ module.exports = function (app, config) {
 
     // Handle errors thrown from middleware/routes
     app.use(error_middleware);
-
-    app.configure('development', function () {
-        require('express-trace')(app);
-    });
 };
