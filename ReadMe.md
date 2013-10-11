@@ -114,7 +114,7 @@ module.exports = function (Users) {
 ```javascript
 // lib/routes.js
 
-/* app is a dependency provided by express train and is you express application.
+/* app is a dependency provided by express train and is your express application.
    ApiController is injected with the return value from ApiController.js */
 module.exports = function (app, ApiController) {
 
