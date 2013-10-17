@@ -2,7 +2,7 @@ var boilerplate = require('boilerplate'),
     path = require('path'),
     fs = require('fs'),
     ps = require('child_process'),
-    _ = require('underscore');
+    _ = require('lodash');
 
 var templates = {
     'train-template-basic':path.resolve(__dirname, '../../boilerplates/basic'),

@@ -17,16 +17,14 @@
     }
   ],
   "dependencies": {
-    "boilerplate": "latest",
-    "connect": "latest",
-    "express": "latest",
-    "underscore": "latest",
-    "commander": "latest",
-    "handlebars": "~1.0.7",
-    "winston": "latest",
-    "nodemon": "latest",
-    "repl.history": "latest",
-    "nject": "latest"
+    "boilerplate": "~0.1.5",
+    "express": "~3.4.1",
+    "lodash": "~2.2.1",
+    "commander": "~2.0.0",
+    "handlebars": "~1.0.12",
+    "nodemon": "~0.7.10",
+    "repl.history": "~0.1.1",
+    "nject": "~0.1.6"
   },
   "devDependencies": {
     "mocha": "latest",

@@ -1,8 +1,8 @@
 var path = require('path'),
     fs = require('fs'),
     ps = require('child_process'),
-    spawn = require('child_process').spawn
-_ = require('underscore');
+    spawn = require('child_process').spawn,
+    _ = require('lodash');
 
 module.exports = function (program) {
     var cmd = program.command('cycle')

@@ -4,7 +4,7 @@ var program = require('commander'),
     pkg = require('../package.json'),
     path = require('path'),
     fs = require('fs')
-    _ = require('underscore');
+    _ = require('lodash');
 
 program.version(pkg.version)
 .usage('[command] <options>');

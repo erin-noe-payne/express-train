@@ -1,5 +1,5 @@
 var repl = require('repl'),
-    _ = require('underscore'),
+    _ = require('lodash'),
     path = require('path'),
     train = require('../../lib/app'),
     history = require('repl.history');
