@@ -27,8 +27,8 @@
     "nject": "~0.1.6"
   },
   "devDependencies": {
-    "mocha": "latest",
-    "should": "latest"
+    "mocha": "~1.13.0",
+    "should": "~2.0.1"
   },
   "keywords": [
     "express",
@@ -47,7 +47,8 @@
     "train": "./bin/train"
   },
   "scripts": {
-    "prepublish": "npm prune"
+    "prepublish": "npm prune",
+    "test": "mocha test -r should --growl --reporter spec"
   },
   "engines": {
     "node": ">= 0.6.0"

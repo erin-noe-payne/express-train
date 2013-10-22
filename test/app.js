@@ -1,49 +1,135 @@
 var should = require('should'),
     path = require('path'),
-    train = require('../index.js').app;
+    fs = require('fs'),
+    express = require('express'),
+    _ = require('lodash'),
+    train = require('../lib/app');
 
-var appPath = path.join(process.cwd(), 'test/example/app');
+var BASE_DIR = path.resolve(__dirname, 'scaffold'),
+    APP_DIR = path.join(BASE_DIR, 'app')
+var MODULE_TEMPLATE = 'module.exports = function(){}';
 
-describe('train app', function(){
-  
-  describe('config',function(){
-    describe('when in development mode', function(){
-      process.env.NODE_ENV = 'development';
-      var app = train(appPath);
-      var devJson = require('./example/config/development.json');
+describe('express-train', function () {
 
-      it('should have the development-secret key', function(){
-        app.config.cookie_secret.should.equal(devJson.cookie_secret);
-      })
-    });
+    var dirStructure = {
+        config: {
+            'default.json': '{"name":"max"}',
+            'production.json': '{"name":"bart"}',
+            'handlebars.json': '{"name":"{{NAME}}"}'
+        },
+        app: {
+            controllers: {
+                '.hiddenFile':1,
+                '.hiddenDirectory': {
+                    burried:1,
+                    content:1
+                },
+                ApiCtrl:1,
+                ViewCtrl:1
+            },
+            lib: {},
+            middleware: {},
+            models: {
+                Users:1,
+                Accounts:1
+            },
+            public: {},
+            views: {},
+            'configOverride.json':'{"name":"william"}'
+        }
+    }
 
-    describe('when env does not match a file', function(){
-      process.env.NODE_ENV = 'ferret';
-      var app = train(appPath);
-      var defaultCfg = require(path.join(appPath,'../config/default.json'));
-      it('should have the default secret key', function(){
-        app.config.cookie_secret.should.equal(defaultCfg.cookie_secret);
-      })
-    });
-
-    describe('when there are handlebars tokens in the values', function(){
-      process.env.NODE_ENV = 'production';
-      process.env.PORT = 8080;
-      var app = train(appPath);
-
-      it('should inject an environment variable into the token', function(){
-        app.config.http.port.should.equal(process.env.PORT);
-      });
-    });
-  });
-
-  describe('init', function(){
-    describe('on app create', function(){
-      var app = train(appPath);
-      it('should load and execute files in the init directory', function(){
-        // assumes the file in appdir/init will add this simple value
-        should.exist(app.initValue);
-      })
+    var app;
+    beforeEach(function(){
+        hydrate(dirStructure, BASE_DIR)
     })
-  });
+
+    afterEach(function(){
+        cleanup(BASE_DIR)
+        delete process.env.NODE_ENV
+    })
+
+    describe('app', function(){
+        it('returns an object', function(){
+            app = train(APP_DIR)
+            app.should.be.an.instanceOf(Object)
+        })
+        it('provides a the config constant', function(){
+            app = train(APP_DIR)
+            app.config.should.be.an.instanceOf(Object)
+        })
+        it('provides an express app via `app`', function(){
+            app = train(APP_DIR)
+            should.exist(app.app)
+            app.app.listen.should.be.an.instanceOf(Function)
+        })
+        it('allows override of app if an app.js file is present', function(){
+
+        })
+        it('allows override of app if an app.js file is present')
+        it('ignores files that begin with `.`')
+        it('ignores directories that begin with `.`')
+        it('respects the locations override')
+
+    })
+
+    describe('config', function(){
+        it('if node env is not set, defaults to default.json', function(){
+            process.env.NODE_ENV = undefined;
+            app = train(APP_DIR)
+            app.config.name.should.equal('max')
+        })
+        it('loads based on NODE_ENV', function(){
+            process.env.NODE_ENV = 'production';
+            app = train(APP_DIR)
+            app.config.name.should.equal('bart')
+        })
+        it('if NODE_ENV does not match a config, defaults to default.json', function(){
+            process.env.NODE_ENV = 'test';
+            app = train(APP_DIR)
+            app.config.name.should.equal('max')
+        })
+        it('is handlebars compiled against env variables', function (){
+            process.env.NODE_ENV = 'handlebars';
+            process.env.NAME = 'ted';
+            app = train(APP_DIR)
+            app.config.name.should.equal('ted')
+        })
+    })
+
+
+
+
 });
+
+function hydrate(structure, location) {
+    fs.mkdirSync(location)
+    _.each(structure, function (definition, name) {
+        var nextLocation = path.join(location, name)
+        if (_.isObject(definition)) {
+            hydrate(definition, nextLocation);
+        } else {
+            var template = MODULE_TEMPLATE
+            if (_.isString(definition)) {
+                template = definition
+            }
+            fs.writeFileSync(nextLocation, template)
+        }
+    });
+}
+
+function cleanup(dir) {
+    var files = [];
+    if (fs.existsSync(dir)) {
+        files = fs.readdirSync(dir);
+        files.forEach(function (file, index) {
+            var curPath = dir + "/" + file;
+            if (fs.statSync(curPath).isDirectory()) { // recurse
+                cleanup(curPath);
+            } else { // delete file
+                fs.unlinkSync(curPath);
+            }
+        });
+        fs.rmdirSync(dir);
+    }
+};
