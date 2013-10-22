@@ -46,7 +46,9 @@ describe('express-train', function () {
 
     afterEach(function(){
         cleanup(BASE_DIR)
+        process.removeAllListeners('uncaughtException')
         delete process.env.NODE_ENV
+        delete app;
     })
 
     describe('app', function(){
@@ -64,12 +66,32 @@ describe('express-train', function () {
             app.app.listen.should.be.an.instanceOf(Function)
         })
         it('allows override of app if an app.js file is present', function(){
+            var localDirStructure = _.cloneDeep(dirStructure),
+                appFile = "module.exports = function(){return 'hello world'}";
 
+            localDirStructure.app.lib.app = appFile;
+
+            cleanup(BASE_DIR);
+            hydrate(localDirStructure, BASE_DIR);
+
+            app = train(APP_DIR);
+
+            app.app.should.equal('hello world');
         })
-        it('allows override of app if an app.js file is present')
-        it('ignores files that begin with `.`')
-        it('ignores directories that begin with `.`')
-        it('respects the locations override')
+        it('ignores files that begin with `.`', function(){
+            app = train(APP_DIR)
+            should.not.exist(app['.hiddenFile'])
+        })
+        it('ignores directories that begin with `.`', function(){
+            app = train(APP_DIR)
+            should.not.exist(app.burried)
+            should.not.exist(app.content)
+        })
+        it('respects the locations override', function(){
+            app = train(APP_DIR, {config: {path: 'configOverride.json'}})
+
+            app.config.name.should.equal('william')
+        })
 
     })
 
