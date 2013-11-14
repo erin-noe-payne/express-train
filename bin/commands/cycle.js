@@ -2,6 +2,7 @@ var path = require('path'),
     fs = require('fs'),
     ps = require('child_process'),
     spawn = require('child_process').spawn,
+    resolveProjectRoot = require('../../lib/resolveProjectRoot'),
     _ = require('lodash');
 
 module.exports = function (program) {
@@ -11,17 +12,11 @@ module.exports = function (program) {
         .option('-d, --debug', 'Node process will listen on debug port');
 
     cmd.action(function () {
-        var appPath = process.argv[3] || path.join(process.cwd(), '/app');
+        var fileArg = process.argv[3]
         var args = [];
 
-        try {
-            appPath = require.resolve(process.cwd());
-            args = [appPath];
-        }
-        catch(err){
-            var runnerPath = path.join('./node_modules/express-train/lib/runner')
-            args = [runnerPath, appPath];
-        }
+        var appPath = resolveProjectRoot(fileArg)
+        args = [appPath];
 
         if(cmd.debug) {
             args.unshift('--debug');

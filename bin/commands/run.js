@@ -1,4 +1,5 @@
-var path = require('path');
+var path = require('path'),
+    resolveProjectRoot = require('../../lib/resolveProjectRoot');
 
 module.exports = function (program) {
     var cmd = program.command('run')
@@ -7,25 +8,9 @@ module.exports = function (program) {
             "package.json, falling back to the app directory");
 
     cmd.action(function () {
-        var appPath = process.argv[3]
-        if(!appPath) {
-            var canResolve=false;
-            try {
-                canResolve = require.resolve(process.cwd());
-            }
-            catch(e) {}
+        var fileArg = process.argv[3];
 
-            if(canResolve) {
-                appPath = process.cwd();
-            }
-            else {
-                appPath = path.join(process.cwd(), '/app');
-            }
-        }
-
-        require(appPath)
-
-
+        require(resolveProjectRoot(fileArg));
     });
 
 }

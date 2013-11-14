@@ -2,6 +2,7 @@ var repl = require('repl'),
     _ = require('lodash'),
     path = require('path'),
     train = require('../../lib/app'),
+    resolveProjectRoot = require('../../lib/resolveProjectRoot'),
     history = require('repl.history');
 
 module.exports = function(program) {
@@ -13,11 +14,10 @@ module.exports = function(program) {
 
     //TODO: implement sandbox?
     cmd.action(function(){
-        var appPath = process.argv[3] || '/app'
-        appPath = path.join(process.cwd(), appPath);
+        var fileArg = process.argv[3]
 
+        var app = require(resolveProjectRoot(fileArg));
         var historyPath = path.join(__dirname, '../../.console_history');
-        var app = require(appPath);
 
         var r = repl.start({
             prompt: '> ',
