@@ -6,11 +6,16 @@ var repl = require('repl'),
 
 module.exports = function(program) {
     var cmd = program.command('console')
-            .usage('opens an interactive node console with the your express train application available as "app"');
+        .usage('console [file]')
+        .description('Opens an interactive node console with the your express train application loaded. Each registered ' +
+        'dependency is available globally on the command line. Defaults to loading app/index.js, unless a ' +
+        'main file is specified');
 
     //TODO: implement sandbox?
     cmd.action(function(){
-        var appPath = path.join(process.cwd(), '/app');
+        var appPath = process.argv[3] || '/app'
+        appPath = path.join(process.cwd(), appPath);
+
         var historyPath = path.join(__dirname, '../../.console_history');
         var app = require(appPath);
 

@@ -6,12 +6,12 @@ var path = require('path'),
 
 module.exports = function (program) {
     var cmd = program.command('cycle')
-        .usage('runs the express train application using nodemon to restart on file change for easier development')
+        .usage('cycle [file]')
+        .description('runs the express train application using nodemon to restart on file change for easier development')
         .option('-d, --debug', 'Node process will listen on debug port');
 
     cmd.action(function () {
-        //todo: support main or index.js using require.resolve( process.cwd() );
-        var appPath = path.join(process.cwd(), '/app/index.js');
+        var appPath = process.argv[3] || path.join(process.cwd(), '/app');
         var args = [];
 
         try {
@@ -23,12 +23,11 @@ module.exports = function (program) {
             args = [runnerPath, appPath];
         }
 
-
         if(cmd.debug) {
             args.unshift('--debug');
         }
 
-        var nodemon = spawn('./node_modules/express-train/node_modules/.bin/nodemon', args, {
+        var nodemon = spawn(path.resolve('./node_modules/express-train/node_modules/.bin/nodemon'), args, {
             cwd:process.cwd()
         });
 
