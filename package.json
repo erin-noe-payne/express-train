@@ -1,58 +1,56 @@
 {
-  "name": "express-train",
-  "description": "express 3 framework",
-  "version": "2.0.0",
-  "author": {
-    "name": "Erin Noe-Payne",
-    "email": "saizul@gmail.com"
-  },
-  "contributors": [
-    {
-      "name": "Erin Noe-Payne",
-      "email": "saizul@gmail.com"
+    "name": "express-train",
+    "description": "express 3 framework",
+    "version": "2.0.0",
+    "author": {
+        "name": "Erin Noe-Payne",
+        "email": "saizul@gmail.com"
     },
-    {
-      "name": "Paul Vencill",
-      "email": "paul.vencill@gmail.com"
+    "contributors": [
+        {
+            "name": "Erin Noe-Payne",
+            "email": "saizul@gmail.com"
+        },
+        {
+            "name": "Paul Vencill",
+            "email": "paul.vencill@gmail.com"
+        }
+    ],
+    "dependencies": {
+        "boilerplate": "~0.1.5",
+        "express": "~3.4.1",
+        "lodash": "~2.2.1",
+        "commander": "~2.0.0",
+        "handlebars": "~1.0.12",
+        "nodemon": "~0.7.10",
+        "repl.history": "~0.1.1",
+        "nject": "~1.1.0"
+    },
+    "devDependencies": {
+        "mocha": "~1.13.0",
+        "should": "~2.0.1"
+    },
+    "keywords": [
+        "express",
+        "train",
+        "framework",
+        "web",
+        "webapp",
+        "MVC"
+    ],
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/autoric/express-train"
+    },
+    "main": "./lib/app.js",
+    "bin": {
+        "train": "./bin/train"
+    },
+    "scripts": {
+        "prepublish": "npm prune",
+        "test": "mocha test -w -r should --growl --reporter spec"
+    },
+    "engines": {
+        "node": ">= 0.10.0"
     }
-  ],
-  "dependencies": {
-    "boilerplate": "~0.1.5",
-    "express": "~3.4.1",
-    "lodash": "~2.2.1",
-    "commander": "~2.0.0",
-    "handlebars": "~1.0.12",
-    "nodemon": "~0.7.10",
-    "repl.history": "~0.1.1",
-    "nject": "~1.1.0"
-  },
-  "devDependencies": {
-    "mocha": "~1.13.0",
-    "should": "~2.0.1"
-  },
-  "keywords": [
-    "express",
-    "train",
-    "framework",
-    "web",
-    "webapp",
-    "MVC"
-  ],
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/autoric/express-train"
-  },
-  "main": "./lib/app.js",
-  "bin": {
-    "train": "./bin/train"
-  },
-  "scripts": {
-    "prepublish": "npm prune",
-    "test": "mocha test -w -r should --growl --reporter spec"
-  },
-  "engines": {
-    "node": ">= 0.6.0"
-  },
-  "_id": "express-train@0.0.1",
-  "_from": "express-train@0.0.1"
 }

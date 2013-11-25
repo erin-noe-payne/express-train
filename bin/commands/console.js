@@ -27,13 +27,14 @@ module.exports = function (program) {
 
         r.on('exit', process.exit);
 
+        console.log('console starting ...')
         var app = require(resolveProjectRoot(fileArg));
-
         app.on('error', function(err){
             console.error(err)
         });
 
         app.on('resolved', function(resolved){
+            console.log('console ready ...')
             _.extend(r.context, resolved);
         });
     });
