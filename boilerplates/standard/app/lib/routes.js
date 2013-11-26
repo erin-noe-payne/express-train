@@ -1,6 +1,6 @@
 //var resource = require('express-resource');
 
-module.exports = function (app, ApiController, HomeController, models) {
+module.exports = function (app, middleware, ApiController, HomeController, models) {
 
     // Home
     //app.resource(app.controllers.home);

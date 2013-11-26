@@ -1,7 +1,7 @@
 var express = require('express'),
     mongoose = require('mongoose'),
     connect_timeout = require('connect-timeout'),
-    MongoStore = require('connect-mongodb');
+    MongoStore = require('connect-mongo')(express);
 
 // Middleware
 

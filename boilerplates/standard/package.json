@@ -10,7 +10,7 @@
         "express":"3.2.x",
         "express-train":"1.0.x",
         "connect-timeout":"latest",
-        "connect-mongodb":"latest",
+        "connect-mongo":"latest",
         "mongoose":"latest",
         "async":"latest",
         "express-hbs":"latest",

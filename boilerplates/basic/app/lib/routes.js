@@ -1,4 +1,4 @@
-module.exports = function (app, HomeController) {
+module.exports = function (app, middleware, HomeController) {
 
     app.get('/', HomeController.index);
 
