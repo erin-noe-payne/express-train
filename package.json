@@ -24,7 +24,7 @@
     "handlebars": "~1.0.12",
     "nodemon": "~0.7.10",
     "repl.history": "~0.1.1",
-    "nject": "~1.1.0"
+    "nject": "~1.2.0"
   },
   "devDependencies": {
     "mocha": "~1.13.0",
