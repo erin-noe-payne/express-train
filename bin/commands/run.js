@@ -10,7 +10,8 @@ module.exports = function (program) {
     cmd.action(function () {
         var fileArg = process.argv[3];
 
-        require(resolveProjectRoot(fileArg));
+        var app = require(resolveProjectRoot(fileArg));
+        app.resolve()
     });
 
 }
