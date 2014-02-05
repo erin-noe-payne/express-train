@@ -37,6 +37,8 @@ module.exports = function (program) {
             console.log('console ready ...')
             _.extend(r.context, resolved);
         });
+
+        app.resolve()
     });
 
 }
