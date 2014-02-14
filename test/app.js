@@ -131,6 +131,20 @@ describe('express-train', function () {
         done()
       });
     });
+
+    it('if there is an nject error in resolution, it is thrown when the tree resolves', function(){
+
+      fs.writeFileSync(path.join(APP_DIR, '/controllers/willdail'), 'module.exports = function(doesntExist){}')
+
+      var tree = train(APP_DIR)
+
+      doResolve = function(){
+        tree.resolve()
+      }
+
+      doResolve.should.throw
+    })
+
   });
 
   describe('config', function () {
