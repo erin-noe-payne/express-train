@@ -21,11 +21,13 @@ describe('express-train', function () {
       controllers: {
         '.hiddenFile': 1,
         '.hiddenDirectory': {
-          burried: 1,
-          content: 1
+          'burried.js': 1,
+          'content.js': 1
         },
-        ApiCtrl: 1,
-        ViewCtrl: 1
+        'ApiCtrl.js': 1,
+        'ApiCtrl.map': 1,
+        'ViewCtrl.js': 1,
+        'ViewCtrl.map': 1
       },
       lib: {},
       middleware: {
@@ -83,15 +85,6 @@ describe('express-train', function () {
       });
     });
 
-    it('provides an express app via `app`', function (done) {
-      var tree = train(APP_DIR)
-
-      tree.resolve(function (err, app) {
-        should.exist(app.app);
-        app.app.listen.should.be.an.instanceOf(Function);        done()
-      });
-    });
-
     it('allows override of app if an app.js file is present', function (done) {
       var localDirStructure = _.cloneDeep(dirStructure),
           appFile = "module.exports = function(){return 'hello world'}";
@@ -104,6 +97,7 @@ describe('express-train', function () {
       var tree = train(APP_DIR)
 
       tree.resolve(function (err, app) {
+        console.log(app)
         app.app.should.equal('hello world');
         done()
       });
