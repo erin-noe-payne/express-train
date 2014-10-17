@@ -1,3 +1,9 @@
+# Express train 3.x! What's new?
+
+ - Drop dependency on express, no more app reserved variable. What does your application do? It's totally up to you!
+ - No more default locations. You define your directory structure.
+ - Support for include and exclude patterns.
+
 # Getting Started
 
 Welcome to Express Train! Express Train is a framework for building web applications in nodejs, based on [express 3](http://expressjs.com/).
