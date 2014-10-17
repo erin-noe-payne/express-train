@@ -1,13 +1,12 @@
 var should = require('should'),
-    path = require('path'),
-    fs = require('fs'),
-    express = require('express'),
-    _ = require('lodash'),
-    train = require('../lib/app');
+  path = require('path'),
+  fs = require('fs'),
+  _ = require('lodash'),
+  train = require('../lib/app');
 
 var BASE_DIR = path.resolve(__dirname, 'scaffold'),
-    APP_DIR = path.join(BASE_DIR, 'app')
-var MODULE_TEMPLATE = 'module.exports = function(){}';
+  APP_DIR = path.join(BASE_DIR, 'app')
+var MODULE_TEMPLATE = 'module.exports = function(){return true}';
 
 describe('express-train', function () {
 
@@ -25,37 +24,36 @@ describe('express-train', function () {
           'content.js': 1
         },
         'ApiCtrl.js': 1,
-        'ApiCtrl.map': 1,
-        'ViewCtrl.js': 1,
-        'ViewCtrl.map': 1
+        'ViewCtrl.js': 1
       },
       lib: {},
       middleware: {
         subDirectory: {
-          SubMiddleware: 1
+          'SubMiddleware.coffee': 1
         },
-        Middleware: 1
+        'Middleware.js': 1
       },
       models: {
-        Users: 1,
-        Accounts: 1
+        'Users.coffee': 1,
+        'Accounts.js': 1,
+        'Banks.json': '{}'
       },
       public: {},
       views: {},
       'configOverride.json': '{"name":"william"}'
     }
-  }
+  };
 
   var app;
   beforeEach(function () {
     hydrate(dirStructure, BASE_DIR)
-  })
+  });
 
   afterEach(function () {
     cleanup(BASE_DIR)
     delete process.env.NODE_ENV
     delete app;
-  })
+  });
 
   describe('app', function () {
     it('returns an unresolved nject tree object', function () {
@@ -85,72 +83,121 @@ describe('express-train', function () {
       });
     });
 
-    it('allows override of app if an app.js file is present', function (done) {
-      var localDirStructure = _.cloneDeep(dirStructure),
-          appFile = "module.exports = function(){return 'hello world'}";
+    it('respects global include patterns', function (done) {
+      var tree = train(APP_DIR, {directories: [
+        {path: 'controllers'}
+      ]});
 
-      localDirStructure.app.lib.app = appFile;
-
-      cleanup(BASE_DIR);
-      hydrate(localDirStructure, BASE_DIR);
-
-      var tree = train(APP_DIR)
-
-      tree.resolve(function (err, app) {
-        console.log(app)
-        app.app.should.equal('hello world');
+      tree.resolve(function (err, resolved) {
+        resolved.ApiCtrl.should.exist
+        resolved.ViewCtrl.should.exist
         done()
-      });
-    });
+      })
+    })
 
-    it('ignores files that begin with `.`', function (done) {
-      var tree = train(APP_DIR)
+    it('correctly walks nested directories', function (done) {
+      var tree = train(APP_DIR, {directories: [
+        {path: 'middleware'}
+      ]});
 
-      tree.resolve(function (err, app) {
-        should.not.exist(app['.hiddenFile']);
+      tree.resolve(function (err, resolved) {
+        should.exist(resolved.Middleware)
+        should.exist(resolved.SubMiddleware)
         done()
-      });
-    });
+      })
+    })
 
-    it('ignores directories that begin with `.`', function (done) {
-      var tree = train(APP_DIR)
+    it('respects local include patterns', function (done) {
+      var tree = train(APP_DIR, {directories: [
+        {path: 'middleware', include: '**/*.js'},
+        {path: 'models'}
+      ]});
 
-      tree.resolve(function (err, app) {
-        should.not.exist(app.burried);
-        should.not.exist(app.content);
+      tree.resolve(function (err, resolved) {
+        should.exist(resolved.Middleware)
+        should.not.exist(resolved.SubMiddleware)
+        should.exist(resolved.Users)
+        should.exist(resolved.Accounts)
+        should.exist(resolved.Banks)
         done()
+      })
+    })
+
+    it('respects global exclude patterns', function (done) {
+      var tree = train(APP_DIR, {
+        exclude: '**/*.coffee',
+        directories: [
+          {path: 'middleware'},
+          {path: 'models'}
+        ]
       });
-    });
 
-    it('respects the locations override', function (done) {
-      var tree = train(APP_DIR, {config: {path: 'configOverride.json'}})
-
-      tree.resolve(function (err, app) {
-        app.config.name.should.equal('william');
+      tree.resolve(function (err, resolved) {
+        should.exist(resolved.Middleware)
+        should.not.exist(resolved.SubMiddleware)
+        should.not.exist(resolved.Users)
+        should.exist(resolved.Accounts)
+        should.exist(resolved.Banks)
         done()
+      })
+
+    })
+
+    it('respects local exclude patterns', function (done) {
+      var tree = train(APP_DIR, {
+        directories: [
+          {path: 'middleware'},
+          {path: 'models', exclude : '**/*.coffee'}
+        ]
       });
-    });
 
-    it('if there is an nject error in resolution, it is thrown when the tree resolves', function(){
-      fs.writeFileSync(path.join(APP_DIR, '/controllers/willdail'), 'module.exports = function(doesntExist){}')
-      var tree = train(APP_DIR)
+      tree.resolve(function (err, resolved) {
+        should.exist(resolved.Middleware)
+        should.exist(resolved.SubMiddleware)
+        should.not.exist(resolved.Users)
+        should.exist(resolved.Accounts)
+        should.exist(resolved.Banks)
+        done()
+      })
+    })
 
-      doResolve = function(){
-        tree.resolve()
-      }
-
-      doResolve.should.throw
-    });
-
-    it('allows limited traversal', function(done){
-      var tree = train(APP_DIR, {middleware:{path:'middleware', autoinject:true, recurse:1}});
-
-      tree.resolve(function(err, app){
-        app.should.have.ownProperty('Middleware');
-        app.should.not.have.ownProperty('SubMiddleware');
-        done();
+    it('supports an array of include patterns', function(done){
+      var tree = train(APP_DIR, {
+        include : ['**/*.js', '**/*.coffee'],
+        directories: [
+          {path: 'middleware'},
+          {path: 'models'}
+        ]
       });
-    });
+
+      tree.resolve(function (err, resolved) {
+        should.exist(resolved.Middleware)
+        should.exist(resolved.SubMiddleware)
+        should.exist(resolved.Users)
+        should.exist(resolved.Accounts)
+        should.not.exist(resolved.Banks)
+        done()
+      })
+    })
+
+    it('supports an array of exclude patterns', function(done){
+      var tree = train(APP_DIR, {
+        exclude : ['**/*.js', '**/*.coffee'],
+        directories: [
+          {path: 'middleware'},
+          {path: 'models'}
+        ]
+      });
+
+      tree.resolve(function (err, resolved) {
+        should.not.exist(resolved.Middleware)
+        should.not.exist(resolved.SubMiddleware)
+        should.not.exist(resolved.Users)
+        should.not.exist(resolved.Accounts)
+        should.exist(resolved.Banks)
+        done()
+      })
+    })
   });
 
   describe('config', function () {
@@ -164,6 +211,7 @@ describe('express-train', function () {
         done();
       });
     });
+
     it('loads based on NODE_ENV', function (done) {
       process.env.NODE_ENV = 'production';
 
@@ -174,6 +222,7 @@ describe('express-train', function () {
         done()
       });
     })
+
     it('if NODE_ENV does not match a config, defaults to default.json', function (done) {
       process.env.NODE_ENV = 'test';
       var tree = train(APP_DIR)
@@ -194,37 +243,40 @@ describe('express-train', function () {
         done()
       });
     });
-  })
-});
-
-function hydrate(structure, location) {
-  fs.mkdirSync(location)
-  _.each(structure, function (definition, name) {
-    var nextLocation = path.join(location, name)
-    if (_.isObject(definition)) {
-      hydrate(definition, nextLocation);
-    } else {
-      var template = MODULE_TEMPLATE
-      if (_.isString(definition)) {
-        template = definition
-      }
-      fs.writeFileSync(nextLocation, template)
-    }
   });
-}
 
-function cleanup(dir) {
-  var files = [];
-  if (fs.existsSync(dir)) {
-    files = fs.readdirSync(dir);
-    files.forEach(function (file, index) {
-      var curPath = dir + "/" + file;
-      if (fs.statSync(curPath).isDirectory()) { // recurse
-        cleanup(curPath);
-      } else { // delete file
-        fs.unlinkSync(curPath);
+  function hydrate(structure, location) {
+    fs.mkdirSync(location)
+    _.each(structure, function (definition, name) {
+      var nextLocation = path.join(location, name)
+      if (_.isObject(definition)) {
+        hydrate(definition, nextLocation);
+      } else {
+        var template = MODULE_TEMPLATE
+        if (_.isString(definition)) {
+          template = definition
+        }
+        fs.writeFileSync(nextLocation, template)
       }
     });
-    fs.rmdirSync(dir);
   }
-};
+
+  function cleanup(dir) {
+    var files = [];
+    if (fs.existsSync(dir)) {
+      files = fs.readdirSync(dir);
+      files.forEach(function (file, index) {
+        var curPath = dir + "/" + file;
+        if (fs.statSync(curPath).isDirectory()) { // recurse
+          cleanup(curPath);
+        } else { // delete file
+          fs.unlinkSync(curPath);
+        }
+      });
+      fs.rmdirSync(dir);
+    }
+  };
+
+});
+
+
