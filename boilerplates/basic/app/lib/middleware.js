@@ -14,7 +14,8 @@ module.exports = function (app) {
     // Middleware stack for all requests
     app.use(express['static'](app.get('public')));                      // static files in /public
     app.use(express.cookieParser());                                    // req.cookies
-    app.use(express.bodyParser());                                      // req.body & req.files
+    app.use(express.json());                                            // req.body & req.files
+    app.use(express.urlencoded());
     app.use(express.methodOverride());                                  // '_method' property in body (POST -> DELETE / PUT)
     app.use(app.router);                                                // routes in lib/routes.js
     app.use(function(req, res, next){                                   // barebones 404 handler
