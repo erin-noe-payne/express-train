@@ -28,7 +28,12 @@ describe('express-train', function () {
         ViewCtrl: 1
       },
       lib: {},
-      middleware: {},
+      middleware: {
+        subDirectory: {
+          SubMiddleware: 1
+        },
+        Middleware: 1
+      },
       models: {
         Users: 1,
         Accounts: 1
@@ -129,6 +134,27 @@ describe('express-train', function () {
       tree.resolve(function (err, app) {
         app.config.name.should.equal('william');
         done()
+      });
+    });
+
+    it('if there is an nject error in resolution, it is thrown when the tree resolves', function(){
+      fs.writeFileSync(path.join(APP_DIR, '/controllers/willdail'), 'module.exports = function(doesntExist){}')
+      var tree = train(APP_DIR)
+
+      doResolve = function(){
+        tree.resolve()
+      }
+
+      doResolve.should.throw
+    });
+
+    it('allows limited traversal', function(done){
+      var tree = train(APP_DIR, {middleware:{path:'middleware', autoinject:true, recurse:1}});
+
+      tree.resolve(function(err, app){
+        app.should.have.ownProperty('Middleware');
+        app.should.not.have.ownProperty('SubMiddleware');
+        done();
       });
     });
   });
