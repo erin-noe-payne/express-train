@@ -39,9 +39,6 @@
     "url": "https://github.com/autoric/express-train"
   },
   "main": "./lib/app.js",
-  "bin": {
-    "train": "./bin/train"
-  },
   "scripts": {
     "prepublish": "npm prune",
     "test": "mocha test -w -r should --growl --reporter spec"
