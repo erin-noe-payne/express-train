@@ -1,11 +1,12 @@
-var should = require('should'),
-  path = require('path'),
-  fs = require('fs'),
-  _ = require('lodash'),
-  train = require('../lib/app');
+var should  = require('should'),
+  path      = require('path'),
+  fs        = require('fs'),
+  _         = require('lodash'),
+  train     = require('../lib/app');
 
-var BASE_DIR = path.resolve(__dirname, 'scaffold'),
-  APP_DIR = path.join(BASE_DIR, 'app')
+
+var BASE_DIR  = path.resolve(__dirname, 'scaffold'),
+    APP_DIR   = path.join(BASE_DIR, 'app');
 var MODULE_TEMPLATE = 'module.exports = function(){return true}';
 
 describe('express-train', function () {
@@ -45,6 +46,16 @@ describe('express-train', function () {
   };
 
   var app;
+  /*
+    Clean up any required directory.  This is useful if the test don't run
+    fully to completion and leave any directory behind.  So, what happens
+    then is that we might get a 'file already exists' error.
+   */
+  before(function () {
+    cleanup(BASE_DIR)
+    delete app;
+  });
+
   beforeEach(function () {
     hydrate(dirStructure, BASE_DIR)
   });
@@ -244,6 +255,46 @@ describe('express-train', function () {
       });
     });
   });
+
+  describe('callbacks', function() {
+    it('should call onConfiguration if provided', function(done) {
+      train(APP_DIR, {
+        callbacks: {
+          onConfiguration: function (tree, config) {
+            done()
+          }
+        }
+      })
+    })
+
+    it('should call onConfiguration prior to adding configuration', function(done) {
+      train(APP_DIR, {
+        callbacks: {
+          onConfiguration: function(tree, config) {
+            tree.isRegistered('config').should.be.false
+            config.name.should.equal('max')
+            done()
+          }
+        }
+      })
+    })
+
+    it('should call onConfiguration prior to adding configuration', function(done) {
+      var calledInfo = false;
+      train(APP_DIR, {
+        callbacks: {
+          onConfiguration: function(tree, config) {
+            tree.on('info', function(msg) {
+              calledInfo = true;
+            })
+          }
+        }
+      }).resolve(function(err, res) {
+        calledInfo.should.be.true
+        done()
+      })
+    })
+  })
 
   function hydrate(structure, location) {
     fs.mkdirSync(location)
