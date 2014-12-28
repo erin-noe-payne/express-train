@@ -1,7 +1,7 @@
 {
   "name": "express-train",
   "description": "express 3 framework",
-  "version": "2.1.3",
+  "version": "3.1.2",
   "author": {
     "name": "Erin Noe-Payne",
     "email": "saizul@gmail.com"
@@ -17,14 +17,10 @@
     }
   ],
   "dependencies": {
-    "boilerplate": "~0.1.5",
-    "express": "~3.4.7",
     "lodash": "~2.2.1",
-    "commander": "~2.0.0",
     "handlebars": "~1.0.12",
-    "nodemon": "~0.7.10",
-    "repl.history": "~0.1.1",
-    "nject": "~1.2.0"
+    "nject": "~1.3.1",
+    "glob": "~4.0.6"
   },
   "devDependencies": {
     "mocha": "~1.13.0",
@@ -43,9 +39,6 @@
     "url": "https://github.com/autoric/express-train"
   },
   "main": "./lib/app.js",
-  "bin": {
-    "train": "./bin/train"
-  },
   "scripts": {
     "prepublish": "npm prune",
     "test": "mocha test -w -r should --growl --reporter spec"

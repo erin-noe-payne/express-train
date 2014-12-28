@@ -1,44 +1,28 @@
+# Express train 3.x! What's new?
+
+ - Drop dependency on express, no more app reserved variable. What does your application do? It's totally up to you!
+ - No more default locations. Express train no longer expects a specific project structure.
+ - Uses [node-glob](https://github.com/isaacs/node-glob) to define file patterns.
+
 # Getting Started
 
-Welcome to Express Train! Express Train is a framework for building web applications in nodejs, based on [express 3](http://expressjs.com/).
-
-Express Train does not provide command line tools, and instead uses [yeoman](http://yeoman.io/index.html) to manage project scaffolding. 
-
-To get started:
-```sh
-$ npm install -g yo generator-express-train
-```
-
-You are now ready to create and run new projects:
-```
-$ mkdir myProject && cd $_
-$ yo express-train
-$ node .
-```
-
-# Why use Express Train?
-
-Because express is excellent, but it makes no decisions for you and does not enforce any structure.  The result can be a steep learning curve for new developers to node, or to a given project. Even very good developers using the same tools to build towards the same goals can end up with very different products. And individuals or organizations can struggle to define a repeatable process or consistent structure for their web applications - especially as projects grow in scale and complexity.
-
-Fundamentally, you are still dealing with "just" an express application. Express Train makes no move to obscure or change express's api. However, we are providing some features around that application: 
-
- - A consistent directory structure. 
- - A powerful and flexible dependency injection system. 
+Welcome to Express Train! Express Train is a framework for building applications in nodejs by walking your directory structure, building & resolving an [nject](https://github.com/autoric/nject) dependency tree.
 
 # How it works
 
-## The file structure
+## Specifiy your project structure
 
-Out of the box, an express train project starts with a basic file structure:
+Imagine you have a project like the one outlined below
 
 ```
 app
-  /controllers      -- application controllers (**autoinjected**)
-  /lib              -- application specific modules (**autoinjected**)
-  /middleware       -- application middleware (**autoinjected**)
-  /models           -- application models (**autoinjected**)
+  /controllers      -- application controllers
+  /lib              -- application specific modules
+  /middleware       -- application middleware
+  /models           -- application models
   /public           -- static content (html, js, css, etc)
   /views            -- view templates (loaded into express' view engine)
+  /test             -- your app tests
   index.js          -- index file bootstraps and exports the express train application
 
 bin                 -- executable scripts
@@ -48,11 +32,26 @@ config              -- environmental configuration files
 test                -- tests
 ```
 
+You can use express-train to automatically walk your project structure, and process each file as a module in a dependency tree. You may write an index.js to process all application code, skipping public, views, and tests.
+
+```javascript
+//index.js
+train = require('express-train')
+tree = train({
+    base : __dirname,
+    files : [
+        '**/*.js',
+        '!{public, views, test}/**
+    ]
+})
+```
+
+
 ## Modules (controllers, models, middleware, and libs)
 
-**File names and variable names matter.** All files in the models, controllers, middleware, and lib directories are subject to autoinjection. To read about the exact mechanics check out [nject] (https://github.com/autoric/nject). Within the project, it means that...
+**File names and variable names matter.** All files processed by express train are subject to autoinjection. To read about the exact mechanics check out [nject] (https://github.com/autoric/nject). Within the project, it means that...
 
- - Each of those directories is scanned recursively and each file is registered by filename as a dependency. Therefore no two files should have the same name. Hidden files and directories (name starts with a '.') will be ignored.
+ - Each file that is processed is registered by filename as a dependency. Therefore no two files should have the same name.
  - Any module that exports an object will be registered as a constant.
  - Any module that exports a function will have dependencies injected by variable name. The function arguments will be matched against the registered dependencies (by file name). The return value of the function will be used when it is referenced as a dependency.
 
@@ -65,6 +64,7 @@ app
     ApiController.js
     HomeController.js
   /lib
+    app.js
     routes.js
   /middleware
     Authentication.js
@@ -74,6 +74,8 @@ app
   /views
   index.js
 ```
+
+
 
 ```javascript
 // models/Users.js
@@ -112,10 +114,14 @@ module.exports = function (Users) {
 ```
 
 ```javascript
-// lib/routes.js
+// lib/app.js
+module.exports = function () {
+    return require('express')()
+}
+```
 
-/* app is a dependency provided by express train and is your express application.
-   ApiController is injected with the return value from ApiController.js */
+```javascript
+// lib/routes.js
 module.exports = function (app, ApiController) {
 
     app.get('/api/Users', ApiController.read);
@@ -126,11 +132,9 @@ module.exports = function (app, ApiController) {
 
 ## Dependencies and Application Lifecycle
 
-Express Train does not have a strict application lifecycle. Instead each module is registered and its dependencies are declared. At application startup, the dependency tree is built and modules are resolved in whatever order needed to make sure each module gets what it needs. In addition to your modules, there are a couple 'reserved' dependencies provided by express train that can be injected into your modules:
+Express Train does not have a strict application lifecycle. Instead each module is registered and its dependencies are declared. At application startup, the dependency tree is built and modules are resolved in whatever order needed to make sure each module gets what it needs. In addition to your modules, there is one 'reserved' dependencies provided by express train that can be injected into your modules
 
- - app An [express 3 application] (http://expressjs.com/api.html). Note that for advanced use, you can [override app with a custom implementation](#overriding-app).
- - models An object that aggregates all of the files from the models directory onto a hash. The key / value pairs are the filename and the resolved model. 
- - config Your project's configuration object...
+ - config **object** Your project's configuration object...
 
 ### Configuration
 
