@@ -2,7 +2,8 @@ var should = require('should'),
   path = require('path'),
   fs = require('fs'),
   _ = require('lodash'),
-  train = require('../lib/app');
+  train = require('../lib/app'),
+  nject = require('nject');
 
 
 var BASE_DIR = path.resolve(__dirname, 'scaffold'),
@@ -64,32 +65,19 @@ describe('express-train', function () {
   describe('app', function () {
     it('returns an unresolved nject tree object', function () {
       var tree = train({base: APP_DIR})
-      tree.should.be.an.instanceOf(Object)
-      should.exist(tree._registry)
-      should.exist(tree._resolved)
-      tree._resolved.should.eql({})
+      tree.should.be.an.instanceOf(nject.Tree)
+      //should.exist(tree._registry)
+      //should.exist(tree._resolved)
+      //tree._resolved.should.eql({})
     });
 
-    it('the tree should support resolved event', function (done) {
+    it('provides a the config constant', function() {
       var tree = train({base: APP_DIR})
 
-      tree.on('resolved', function () {
-        done();
-      });
-
-      tree.resolve();
+      tree.resolve('config').should.be.an.instanceOf(Object);
     });
 
-    it('provides a the config constant', function (done) {
-      var tree = train({base: APP_DIR})
-
-      tree.resolve(function (err, app) {
-        app.config.should.be.an.instanceOf(Object);
-        done()
-      });
-    });
-
-    it('respects global include patterns', function (done) {
+    it('respects global include patterns', function() {
       var tree = train({
         base : APP_DIR,
         files: [
@@ -97,14 +85,10 @@ describe('express-train', function () {
         ]
       });
 
-      tree.resolve(function (err, resolved) {
-        resolved.ApiCtrl.should.exist
-        resolved.ViewCtrl.should.exist
-        done()
-      })
+      tree.resolve().should.have.keys(['config', 'ApiCtrl','ViewCtrl'])
     })
 
-    it('correctly walks nested directories', function (done) {
+    it('correctly walks nested directories', function() {
       var tree = train({
         base : APP_DIR,
         files: [
@@ -112,15 +96,11 @@ describe('express-train', function () {
         ]
       });
 
-      tree.resolve(function (err, resolved) {
-        should.exist(resolved.Middleware)
-        should.exist(resolved.SubMiddleware)
-        done()
-      })
-    })
+      tree.resolve().should.have.keys(['config', 'Middleware','SubMiddleware'])
+    });
 
 
-    it('respects include patterns', function (done) {
+    it('respects include patterns', function() {
       var tree = train({
         base : APP_DIR,
         files: [
@@ -129,17 +109,15 @@ describe('express-train', function () {
         ]
       });
 
-      tree.resolve(function (err, resolved) {
-        should.exist(resolved.Middleware)
-        should.not.exist(resolved.SubMiddleware)
-        should.exist(resolved.Users)
-        should.exist(resolved.Accounts)
-        should.exist(resolved.Banks)
-        done()
-      })
-    })
+      tree.resolve().should.have.keys(['config',
+        'Middleware',
+        'Users',
+        'Accounts',
+        'Banks'
+      ]);
+    });
 
-    it('should default to a ** include if given only exclude patterns', function (done) {
+    it('should default to a ** include if given only exclude patterns', function() {
       var tree = train({
         base : APP_DIR,
         files: [
@@ -147,20 +125,17 @@ describe('express-train', function () {
         ]
       });
 
-      tree.resolve(function (err, resolved) {
-        should.exist(resolved.ApiCtrl)
-        should.exist(resolved.ViewCtrl)
-        should.not.exist(resolved.SubMiddleware)
-        should.exist(resolved.Middleware)
-        should.not.exist(resolved.Users)
-        should.exist(resolved.Accounts)
-        should.exist(resolved.Banks)
-
-        done()
-      });
+      tree.resolve().should.have.keys(['config',
+        'ApiCtrl',
+        'ViewCtrl',
+        'Middleware',
+        'Accounts',
+        'Banks',
+        'configOverride'
+      ]);
     });
 
-    it('should respect multiple exclude patterns', function (done) {
+    it('should respect multiple exclude patterns', function() {
       var tree = train({
         base : APP_DIR,
         files: [
@@ -169,20 +144,16 @@ describe('express-train', function () {
         ]
       });
 
-      tree.resolve(function (err, resolved) {
-        should.exist(resolved.ApiCtrl)
-        should.exist(resolved.ViewCtrl)
-        should.not.exist(resolved.SubMiddleware)
-        should.not.exist(resolved.Middleware)
-        should.not.exist(resolved.Users)
-        should.exist(resolved.Accounts)
-        should.exist(resolved.Banks)
-
-        done()
-      });
+      tree.resolve().should.have.keys(['config',
+        'ApiCtrl',
+        'ViewCtrl',
+        'Accounts',
+        'Banks',
+        'configOverride'
+      ]);
     });
 
-    it('should exclude files only from a specified include pattern', function (done) {
+    it('should exclude files only from a specified include pattern', function() {
       var tree = train({
         base : APP_DIR,
         files: [
@@ -191,20 +162,12 @@ describe('express-train', function () {
         ]
       });
 
-      tree.resolve(function (err, resolved) {
-        should.not.exist(resolved.ApiCtrl)
-        should.not.exist(resolved.ViewCtrl)
-        should.not.exist(resolved.SubMiddleware)
-        should.exist(resolved.Middleware)
-        should.not.exist(resolved.Users)
-        should.not.exist(resolved.Accounts)
-        should.not.exist(resolved.Banks)
-
-        done()
-      });
+      tree.resolve().should.have.keys(['config',
+        'Middleware'
+      ]);
     });
 
-    it('should accept object syntax for file patterns', function (done) {
+    it('should accept object syntax for file patterns', function() {
       var tree = train({
         base : APP_DIR,
         files: [
@@ -212,13 +175,13 @@ describe('express-train', function () {
         ]
       });
 
-      tree.resolve(function (err, resolved) {
-        should.exist(resolved.Middleware)
-        should.exist(resolved.SubMiddleware)
-        done()
-      });
+      tree.resolve().should.have.keys(['config',
+        'Middleware',
+        'SubMiddleware'
+      ]);
     });
-    it('should accept aggregate strings for specific patterns', function (done) {
+
+    it('should accept aggregate strings for specific patterns', function() {
       var tree = train({
         base : APP_DIR,
         files: [
@@ -226,16 +189,22 @@ describe('express-train', function () {
         ]
       });
 
-      tree.resolve(function (err, resolved) {
-        should.exist(resolved.Middleware)
-        should.exist(resolved.SubMiddleware)
-        should.exist(resolved.middleware)
-        should.exist(resolved.middleware.Middleware)
-        should.exist(resolved.middleware.SubMiddleware)
-        done()
-      });
+      var resolved = tree.resolve()
+
+      resolved.should.have.keys(['config',
+        'Middleware',
+        'SubMiddleware',
+        'middleware'
+      ]);
+
+      resolved.middleware.should.eql({
+        Middleware: resolved.Middleware,
+        SubMiddleware :resolved.SubMiddleware
+      })
+
     });
-    it('should place a loaded module on more than one aggregate key where there is overlap', function (done) {
+
+    it('should place a loaded module on more than one aggregate key where there is overlap', function() {
       var tree = train({
         base : APP_DIR,
         files: [
@@ -244,103 +213,54 @@ describe('express-train', function () {
         ]
       });
 
-      tree.resolve(function (err, resolved) {
-        should.exist(resolved.middleware)
-        should.exist(resolved.middleware.Middleware)
-        should.exist(resolved.middleware.SubMiddleware)
-        should.exist(resolved.coffee)
-        should.not.exist(resolved.coffee.Middleware)
-        should.exist(resolved.coffee.SubMiddleware)
-        done()
+      var resolved = tree.resolve()
+
+      resolved.middleware.should.eql({
+        Middleware: resolved.Middleware,
+        SubMiddleware :resolved.SubMiddleware
       });
+
+      resolved.coffee.should.eql({
+        SubMiddleware : resolved.SubMiddleware,
+        Users : resolved.Users
+      })
     });
 
     describe('config', function () {
-      it('if node env is not set, defaults to default.json', function (done) {
+      it('if node env is not set, defaults to default.json', function() {
         process.env.NODE_ENV = undefined;
 
         var tree = train({base: APP_DIR})
 
-        tree.resolve(function (err, app) {
-          app.config.name.should.equal('max');
-          done();
-        });
+        tree.resolve('config').name.should.equal('max');
       });
 
-      it('loads based on NODE_ENV', function (done) {
+      it('loads based on NODE_ENV', function() {
         process.env.NODE_ENV = 'production';
 
         var tree = train({base: APP_DIR})
 
-        tree.resolve(function (err, app) {
-          app.config.name.should.equal('bart')
-          done()
-        });
+        tree.resolve('config').name.should.equal('bart');
       })
 
-      it('if NODE_ENV does not match a config, defaults to default.json', function (done) {
+      it('if NODE_ENV does not match a config, defaults to default.json', function() {
         process.env.NODE_ENV = 'test';
         var tree = train({base: APP_DIR})
 
-        tree.resolve(function (err, app) {
-          app.config.name.should.equal('max')
-          done()
-        });
+        tree.resolve('config').name.should.equal('max');
+
       })
 
-      it('is handlebars compiled against env variables', function (done) {
+      it('is handlebars compiled against env variables', function() {
         process.env.NODE_ENV = 'handlebars';
         process.env.NAME = 'ted';
 
         var tree = train({base: APP_DIR})
 
-        tree.resolve(function (err, app) {
-          app.config.name.should.equal('ted')
-          done()
-        });
+        tree.resolve('config').name.should.equal('ted');
       });
     });
   });
-
-  xdescribe('callbacks', function () {
-    it('should call onConfiguration if provided', function (done) {
-      train(APP_DIR, {
-        callbacks: {
-          onConfiguration: function (tree, config) {
-            done()
-          }
-        }
-      })
-    })
-
-    it('should call onConfiguration prior to adding configuration', function (done) {
-      train(APP_DIR, {
-        callbacks: {
-          onConfiguration: function (tree, config) {
-            tree.isRegistered('config').should.be.false
-            config.name.should.equal('max')
-            done()
-          }
-        }
-      })
-    })
-
-    it('should call onConfiguration prior to adding configuration', function (done) {
-      var calledInfo = false;
-      train(APP_DIR, {
-        callbacks: {
-          onConfiguration: function (tree, config) {
-            tree.on('info', function (msg) {
-              calledInfo = true;
-            })
-          }
-        }
-      }).resolve(function (err, res) {
-        calledInfo.should.be.true
-        done()
-      })
-    })
-  })
 
   function hydrate(structure, location) {
     fs.mkdirSync(location)

@@ -1,8 +1,6 @@
-# Express train 3.x! What's new?
+# Express train 4.x! What's new?
 
- - Drop dependency on express, no more app reserved variable. What does your application do? It's totally up to you!
- - No more default locations. Express train no longer expects a specific project structure.
- - Uses [node-glob](https://github.com/isaacs/node-glob) to define file patterns.
+ - Upgrade to newest version of nject. Tree returned by express train should be more powerful and useful especially for unit testing. Take a look at the changes on the [nject docs](https://github.com/autoric/nject).
 
 # Getting Started
 
@@ -151,3 +149,31 @@ When config is complete, the values are all loaded on the app.config object, and
 # Learn More...
 
 For full documentation take a look at the [wiki](https://github.com/autoric/express-train/wiki)
+
+# Changelog
+
+## 4.0.0
+
+ - Drop onConfiguration callback and switch to an events hash that is passed directly to the nject tree as event listeners.
+ - Upgrade to nject 2.x. Drops support for asynchronous resolution, adds a number of new unit testing features, allows for classes to be registered on the tree. Full changelog for nject can be found [here](https://github.com/autoric/nject#200).
+ - Add changelog to README!
+
+## 3.1.5
+
+ - Update to nject 1.3.2
+
+## 3.1.4
+
+ - Exposed `loadConfig` on public api
+
+
+## 3.1.3
+
+ - Expose `onConfiguration` callback
+
+## 3.1.2
+
+ - First public release of 3.x
+ - Drop dependency on express. No longer provide an `app` reserved word injectable.
+ - Drop default locations, replace with glob patterns using node-glob.
+ - Drop command line tools, support for install -g, boilerplate code
