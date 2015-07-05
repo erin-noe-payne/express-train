@@ -39,7 +39,7 @@ tree = train({
     base : __dirname,
     files : [
         '**/*.js',
-        '!{public, views, test}/**
+        '!{public, views, test}/**'
     ]
 })
 ```
