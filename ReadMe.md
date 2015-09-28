@@ -152,6 +152,10 @@ For full documentation take a look at the [wiki](https://github.com/autoric/expr
 
 # Changelog
 
+## 4.0.1
+
+ - Update to latest nject, adding support for es6 arrow functions
+
 ## 4.0.0
 
  - Drop onConfiguration callback and switch to an events hash that is passed directly to the nject tree as event listeners.
