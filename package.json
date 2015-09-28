@@ -1,7 +1,7 @@
 {
   "name": "express-train",
   "description": "express 3 framework",
-  "version": "4.0.0",
+  "version": "4.0.1",
   "author": {
     "name": "Erin Noe-Payne",
     "email": "saizul@gmail.com"
@@ -19,7 +19,7 @@
   "dependencies": {
     "lodash": "~2.2.1",
     "handlebars": "~1.0.12",
-    "nject": "~2.0.0",
+    "nject": "~2.0.1",
     "glob": "~4.0.6"
   },
   "devDependencies": {
