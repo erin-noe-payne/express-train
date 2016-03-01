@@ -152,6 +152,10 @@ For full documentation take a look at the [wiki](https://github.com/autoric/expr
 
 # Changelog
 
+## 4.0.2
+
+ - Removed the try / catch from file requires to avoid swallowing error stack traces.
+
 ## 4.0.1
 
  - Update to latest nject, adding support for es6 arrow functions
